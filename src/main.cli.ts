@@ -16,9 +16,9 @@ async function importModules(directory: string) {
 }
 
 function bootstrap(importedModules: Command[]): void {
-  const cliAplication = new CLIApplication();
-  cliAplication.registerCommands(importedModules);
-  cliAplication.processComand(process.argv);
+  const cliApplication = new CLIApplication();
+  cliApplication.registerCommands(importedModules);
+  cliApplication.processCommand(process.argv);
 }
 
 try {

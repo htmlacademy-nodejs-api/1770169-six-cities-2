@@ -1,11 +1,11 @@
 import chalk from 'chalk';
 
 import TsvFileReader from '../../shared/libs/file-reader/tsv-file-reader.js';
-import {CommandName} from './command.constant.js';
+import {CommandName, ErrorMessage} from './command.constant.js';
 import {Command} from './command.interface.js';
 
 export default class ImportCommand implements Command {
-  readonly name: string = CommandName.Imort;
+  readonly name: string = CommandName.Import;
 
   get(): string {
     return this.name;
@@ -15,7 +15,7 @@ export default class ImportCommand implements Command {
     const [filename] = parameters;
 
     if (!filename) {
-      throw new Error('The path to the file is not specified.');
+      throw new Error(ErrorMessage.UNSPECIFIED_PATH_ERROR);
     }
 
     const fileReader = new TsvFileReader(filename.trim());
@@ -28,7 +28,7 @@ export default class ImportCommand implements Command {
         throw error;
       }
 
-      console.error(chalk.red(`Can't import data from file: ${filename}`));
+      console.error(chalk.red(ErrorMessage.IMPORT_ERROR, filename));
       console.error(chalk.red(`Details: ${error.message}`));
     }
   }

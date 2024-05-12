@@ -1,8 +1,9 @@
 import {readFileSync} from 'node:fs';
-import {FileReaderInterfce} from './file-reader.interface.js';
+import {FileReaderInterface} from './file-reader.interface.js';
 import {Offer} from '../../types/offer.type.js';
+import {ErrorMessage, RADIX} from './file-reader.constant.js';
 
-export default class TsvFileReader implements FileReaderInterfce {
+export default class TsvFileReader implements FileReaderInterface {
   private rawData = '';
 
   constructor(
@@ -15,7 +16,7 @@ export default class TsvFileReader implements FileReaderInterfce {
 
   public toArray(): Offer[] {
     if (!this.rawData) {
-      throw new Error('This file eptuFile was not read.');
+      throw new Error(ErrorMessage.READ_FILE_ERROR);
     }
 
     return this.rawData
@@ -64,9 +65,9 @@ export default class TsvFileReader implements FileReaderInterfce {
         isFavorite: Boolean(isFavorite),
         rating: Number.parseFloat(rating),
         type,
-        bedrooms: Number.parseInt(bedrooms, 10),
-        maxAdults: Number.parseInt(maxAdults, 10),
-        price: Number.parseInt(price, 10),
+        bedrooms: Number.parseInt(bedrooms, RADIX),
+        maxAdults: Number.parseInt(maxAdults, RADIX),
+        price: Number.parseInt(price, RADIX),
         goods: goods.split(';').map((good) => good),
         host: {
           name: userName,
@@ -75,7 +76,7 @@ export default class TsvFileReader implements FileReaderInterfce {
           password,
           isPro: Boolean(isPro)
         },
-        comments: Number.parseInt(comments, 10),
+        comments: Number.parseInt(comments, RADIX),
         location: {
           latitude: Number.parseFloat(latitude),
           longitude: Number.parseFloat(longitude),

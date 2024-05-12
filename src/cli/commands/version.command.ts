@@ -3,7 +3,7 @@ import {resolve} from 'node:path';
 
 import chalk from 'chalk';
 
-import {CommandName} from './command.constant.js';
+import {CommandName, ErrorMessage} from './command.constant.js';
 import {Command} from './command.interface.js';
 
 type PackageJSONConfig = {
@@ -49,7 +49,7 @@ export default class VersionCommand implements Command {
     const content: unknown = JSON.parse(readFile);
 
     if (!isPackageJSONConfig(content)) {
-      throw new Error('Failed to parse json content.');
+      throw new Error(ErrorMessage.PARSE_CONTENT_ERROR);
 
     }
     return content.version;

@@ -1,3 +1,3 @@
-export interface FileReaderInterfce {
+export interface FileReaderInterface {
   read(): void;
 }
