@@ -5,6 +5,7 @@ import chalk from 'chalk';
 
 import {CommandName, ErrorMessage} from './command.constant.js';
 import {Command} from './command.interface.js';
+import {getErrorMessage} from '../../shared/helpers/index.js';
 
 type PackageJSONConfig = {
   version: string;
@@ -35,11 +36,8 @@ export default class VersionCommand implements Command {
       const version = this.readVersion();
       console.info(chalk.yellow(version));
     } catch(error: unknown) {
-      if (!(error instanceof Error)) {
-        throw error;
-      }
-
       console.error(chalk.red(`Can't read version from ${this.filePath}.`));
+      console.error(chalk.red(getErrorMessage(error)));
     }
   }
 
