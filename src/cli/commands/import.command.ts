@@ -1,35 +1,43 @@
 import chalk from 'chalk';
 
-import TsvFileReader from '../../shared/libs/file-reader/tsv-file-reader.js';
-import {CommandName} from './command.constant.js';
+import {TsvFileReader} from '../../shared/libs/file-reader/index.js';
+import {CommandName, ErrorMessage} from './command.constant.js';
 import {Command} from './command.interface.js';
+import {createOffer, getErrorMessage} from '../../shared/helpers/index.js';
 
 export default class ImportCommand implements Command {
-  readonly name: string = CommandName.Imort;
+  readonly name: string = CommandName.Import;
 
-  get(): string {
+  public get(): string {
     return this.name;
   }
 
-  execute(...parameters: string[]): void {
+  public async execute(...parameters: string[]): Promise<void> {
     const [filename] = parameters;
 
     if (!filename) {
-      throw new Error('The path to the file is not specified.');
+      throw new Error(ErrorMessage.UNSPECIFIED_PATH_ERROR);
     }
 
     const fileReader = new TsvFileReader(filename.trim());
 
-    try {
-      fileReader.read();
-      console.log(fileReader.toArray());
-    } catch (error: unknown) {
-      if (!(error instanceof Error)) {
-        throw error;
-      }
+    fileReader.on('line', this.onImportedLine);
+    fileReader.on('end', this.onCompleteImport);
 
-      console.error(chalk.red(`Can't import data from file: ${filename}`));
-      console.error(chalk.red(`Details: ${error.message}`));
+    try {
+      await fileReader.read();
+    } catch (error: unknown) {
+      console.error(chalk.red(ErrorMessage.IMPORT_ERROR, filename));
+      console.error(chalk.red(getErrorMessage(error)));
     }
+  }
+
+  private onImportedLine(line: string) {
+    const offer = createOffer(line);
+    console.info(offer);
+  }
+
+  private onCompleteImport(count: number) {
+    console.info(chalk.yellow(`${count} rows imported.`));
   }
 }

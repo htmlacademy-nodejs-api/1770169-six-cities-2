@@ -1,6 +1,10 @@
-import {Location} from './location.type.js';
+import {CITY} from '../constants/common.constant.js';
+
+export type CityName = keyof typeof CITY;
+
+export type CityLocation = typeof CITY[CityName];
 
 export type City = {
-  name: string;
-  location: Location;
+  name: CityName;
+  location: CityLocation;
 }

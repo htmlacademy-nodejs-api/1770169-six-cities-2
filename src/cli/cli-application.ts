@@ -4,7 +4,7 @@ import {Command} from './commands/command.interface.js';
 
 type Commands = Record<string, Command>
 
-export default class CLIApplication {
+export class CLIApplication {
   private commands: Commands = {};
 
   constructor(
@@ -25,7 +25,7 @@ export default class CLIApplication {
     });
   }
 
-  public processComand(argv: string[]): void {
+  public processCommand(argv: string[]): void {
     const parsedCommand = CommandParser.parse(argv);
     const [commandName] = Object.keys(parsedCommand);
     const command = this.getCommand(commandName);
@@ -35,7 +35,7 @@ export default class CLIApplication {
 
   private getDefaultCommand(): Command | never {
     if (!this.commands[this.defaultCommand]) {
-      throw new Error(`The default command (${this.defaultCommand}) is not registered.`);
+      throw new Error(`The default command "${this.defaultCommand}" is not registered.`);
     }
     return this.commands[this.defaultCommand];
   }
