@@ -8,6 +8,17 @@ export const MODULES_PATH = './cli/commands';
 
 export const FILE_END_SUFFIXES = 'command.js';
 
+export const COMMAND_PREFIX = '--';
+
+export const CHARSET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+export const Separator = {
+  VALUE_SEPARATOR: '\t',
+  LINE_SEPARATOR: '\n',
+  ENUMERATION_SEPARATOR: ';',
+  EMPTY_SEPARATOR: ''
+};
+
 export const Rating = {
   MIN: 1,
   MAX: 5

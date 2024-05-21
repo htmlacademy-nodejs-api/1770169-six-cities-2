@@ -1,3 +1,5 @@
+import {COMMAND_PREFIX} from '../shared/constants/index.js';
+
 type ParsedCommand = Record<string, string[]>;
 
 export default class CommandParser {
@@ -6,7 +8,7 @@ export default class CommandParser {
     let currentCommand: string = '';
 
     cliArguments.forEach((argument) => {
-      if (argument.startsWith('--')) {
+      if (argument.startsWith(COMMAND_PREFIX)) {
         parsedCommand[argument] = [];
         currentCommand = argument;
       } else if (currentCommand && argument) {

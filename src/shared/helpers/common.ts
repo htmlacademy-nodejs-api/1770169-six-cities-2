@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {CHARSET, Separator} from '../constants/common.constant.js';
 
 export const getRandomNumber = (min: number, max: number, numAfterDigit = 0): number => +(Math.random() * (max - min) + min).toFixed(numAfterDigit);
 
@@ -24,11 +25,7 @@ export const getRandomDate = (fromDate: string, toDate: string): string => {
   return dayjs(getRandomNumber(fromDateToMillisecond, toDateToMillisecond)).toISOString();
 };
 
-export const generatePassword = (passwordLength = 6): string => {
-  const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-  return Array.from({length: passwordLength}, () => charset[getRandomNumber(0, charset.length)]).join('');
-};
+export const generatePassword = (passwordLength = 6): string => Array
+  .from({length: passwordLength}, () => CHARSET[getRandomNumber(0, CHARSET.length)]).join(Separator.ENUMERATION_SEPARATOR);
 
-export function getErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : '';
-}
+export const getErrorMessage = (error: unknown): string => error instanceof Error ? error.message : '';
