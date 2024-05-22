@@ -1,26 +1,45 @@
+import {fileURLToPath} from 'node:url';
+
+import {Logger as LoggerType, pino, transport} from 'pino';
+
 import {Logger} from './logger.interface.js';
-import {Logger as LoggerType, pino} from 'pino';
 
 export class PinoLogger implements Logger {
   private readonly logger: LoggerType;
 
   constructor() {
-    this.logger = pino();
+    const destination = fileURLToPath(new URL('../../../../logs/logger.log', import.meta.url));
+    const multiTransport = transport({
+      targets: [
+        {
+          target: 'pino/file',
+          options: {destination},
+          level: 'debug'
+        },
+        {
+          target: 'pino/file',
+          options: {},
+          level: 'info'
+        }
+      ]
+    });
+
+    this.logger = pino({}, multiTransport);
   }
 
-  info(message: string, ...args: unknown[]): void {
+  public info(message: string, ...args: unknown[]): void {
     this.logger.info(message, args);
   }
 
-  warn(message: string, ...args: unknown[]): void {
+  public warn(message: string, ...args: unknown[]): void {
     this.logger.warn(message, args);
   }
 
-  error(message: string, error: Error, ...args: unknown[]): void {
+  public error(message: string, error: Error, ...args: unknown[]): void {
     this.logger.error(error, message, args);
   }
 
-  debug(message: string, ...args: unknown[]): void {
+  public debug(message: string, ...args: unknown[]): void {
     this.logger.debug(message, args);
   }
 }
