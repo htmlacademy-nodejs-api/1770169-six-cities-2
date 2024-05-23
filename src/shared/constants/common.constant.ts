@@ -8,39 +8,15 @@ export const MODULES_PATH = './cli/commands';
 
 export const FILE_END_SUFFIXES = 'command.js';
 
-export const Rating = {
-  MIN: 1,
-  MAX: 5
-};
+export const COMMAND_PREFIX = '--';
 
-export const Bedroom = {
-  MIN: 1,
-  MAX: 8
-};
+export const CHARSET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-export const Guest = {
-  MIN: 1,
-  MAX: 10
-};
-
-export const Price = {
-  MIN: 100,
-  MAX: 100000
-};
-
-export const Comment = {
-  MIN: 1,
-  MAX: 10
-};
-
-export const Date = {
-  FROM: '2020-01-25',
-  TO: '2024-05-01'
-};
-
-export const NumericValue = {
-  TRUE: 1,
-  FALSE: 0
+export const Separator = {
+  VALUE_SEPARATOR: '\t',
+  LINE_SEPARATOR: '\n',
+  ENUMERATION_SEPARATOR: ';',
+  EMPTY_SEPARATOR: ''
 };
 
 export const CITY = {
@@ -68,4 +44,13 @@ export const CITY = {
     latitude: 51.225402,
     longitude: 6.776314
   }
+};
+
+export const ProccesMessage = {
+  REST_APP_INIT_MESSAGE: 'Rest application has been initialized on port: ',
+  ENV_READ_MESSAGE: '.env file read successfully.'
+};
+
+export const ErrorMessga = {
+  ENV_READ_MESSAGE: 'Can\'t read .env file.'
 };

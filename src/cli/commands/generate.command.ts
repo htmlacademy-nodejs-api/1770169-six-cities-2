@@ -8,6 +8,7 @@ import {MockServerDataType} from '../../shared/types/index.js';
 import {TsvOfferGenerate} from '../../shared/libs/data-generate/index.js';
 import {TsvFileWriter} from '../../shared/libs/file-writer/index.js';
 import {getErrorMessage} from '../../shared/helpers/index.js';
+import {RADIX} from '../../shared/constants/index.js';
 
 export default class GenerateCommand implements Command {
   readonly name: string = CommandName.Generate;
@@ -19,7 +20,7 @@ export default class GenerateCommand implements Command {
 
   public async execute(...parameters: string[]): Promise<void> {
     const [count, filepath, url] = parameters;
-    const offerCount = Number.parseInt(count, 10);
+    const offerCount = Number.parseInt(count, RADIX);
 
     try {
       await this.load(url);

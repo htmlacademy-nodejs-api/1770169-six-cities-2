@@ -7,16 +7,17 @@ import {
 } from '../../helpers/index.js';
 import {MockServerDataType} from '../../types/index.js';
 import {DataGenerate} from './data-generate.interface.js';
+import {CITY, Separator} from '../../constants/index.js';
 import {
   Bedroom,
-  CITY,
   Comment,
   Date,
   Guest,
+  MAX_IMAGE_VIEW,
   NumericValue,
   Price,
   Rating
-} from '../../constants/index.js';
+} from './data-generate.constant.js';
 
 export class TsvOfferGenerate implements DataGenerate {
   constructor(
@@ -31,7 +32,7 @@ export class TsvOfferGenerate implements DataGenerate {
     const cityLatitude = CITY[city].latitude;
     const cityLongitude = CITY[city].longitude;
     const previewImage = getRandomElementFromArray(this.mockData.images);
-    const images = getRandomElementsFromArray(this.mockData.images, 6).join(';');
+    const images = getRandomElementsFromArray(this.mockData.images, MAX_IMAGE_VIEW).join(Separator.ENUMERATION_SEPARATOR);
     const isPremium = !!getRandomNumber(NumericValue.FALSE, NumericValue.TRUE);
     const isFavorite = !!getRandomNumber(NumericValue.FALSE, NumericValue.TRUE);
     const rating = getRandomNumber(Rating.MIN, Rating.MAX, 1);
@@ -39,7 +40,7 @@ export class TsvOfferGenerate implements DataGenerate {
     const bedrooms = getRandomNumber(Bedroom.MIN, Bedroom.MAX);
     const maxGuests = getRandomNumber(Guest.MIN, Guest.MAX);
     const price = getRandomNumber(Price.MIN, Price.MAX);
-    const goods = getRandomElementsFromArray(this.mockData.goods).join(';');
+    const goods = getRandomElementsFromArray(this.mockData.goods).join(Separator.ENUMERATION_SEPARATOR);
     const userName = getRandomElementFromArray(this.mockData.names);
     const email = getRandomElementFromArray(this.mockData.emails);
     const avatar = getRandomElementFromArray(this.mockData.avatars);
@@ -75,6 +76,6 @@ export class TsvOfferGenerate implements DataGenerate {
       comments,
       latitude,
       longitude
-    ].join('\t');
+    ].join(Separator.VALUE_SEPARATOR);
   }
 }

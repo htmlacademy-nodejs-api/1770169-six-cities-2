@@ -1,4 +1,4 @@
-import {RADIX} from '../constants/index.js';
+import {RADIX, Separator} from '../constants/index.js';
 import {CityName, Offer} from '../types/index.js';
 
 export const createOffer = (offerData: string): Offer => {
@@ -27,7 +27,7 @@ export const createOffer = (offerData: string): Offer => {
     comments,
     latitude,
     longitude,
-  ] = offerData.replace('\n', '').split('\t');
+  ] = offerData.replace(Separator.LINE_SEPARATOR, Separator.EMPTY_SEPARATOR).split(Separator.VALUE_SEPARATOR);
 
   return {
     title,
@@ -41,7 +41,7 @@ export const createOffer = (offerData: string): Offer => {
       }
     },
     previewImage,
-    images: images.split(';').map((image) => image),
+    images: images.split(Separator.ENUMERATION_SEPARATOR).map((image) => image),
     isPremium: Boolean(isPremium),
     isFavorite: Boolean(isFavorite),
     rating: Number.parseFloat(rating),
@@ -49,7 +49,7 @@ export const createOffer = (offerData: string): Offer => {
     bedrooms: Number.parseInt(bedrooms, RADIX),
     maxGuests: Number.parseInt(maxGuests, RADIX),
     price: Number.parseInt(price, RADIX),
-    goods: goods.split(';').map((good) => good),
+    goods: goods.split(Separator.ENUMERATION_SEPARATOR).map((good) => good),
     host: {
       name: userName,
       email,
