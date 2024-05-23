@@ -30,6 +30,7 @@
     "pino-pretty": "11.0.0",
     "rimraf": "5.0.1",
     "ts-node": "10.9.1",
+    "tslib": "2.6.2",
     "typescript": "5.2.2"
   },
   "type": "module",
@@ -44,6 +45,8 @@
     "dayjs": "1.11.11",
     "dotenv": "16.4.5",
     "got": "14.2.1",
-    "pino": "9.1.0"
+    "inversify": "6.0.2",
+    "pino": "9.1.0",
+    "reflect-metadata": "0.2.2"
   }
 }
