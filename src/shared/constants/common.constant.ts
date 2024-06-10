@@ -46,6 +46,23 @@ export const CITY = {
   }
 };
 
+export enum Housing {
+  apartment = 'apartment',
+  house = 'house',
+  room = 'room',
+  hotel = 'hotel'
+}
+
+export enum Facilities {
+  'Breakfast' = 'breakfast',
+  'Air Conditioning' = 'air conditioning',
+  'Laptop friendly workspace'= 'laptop friendly workspace',
+  'BabySeat' = 'baby seat',
+  'Washer' = 'washer',
+  'Towels' = 'towels',
+  'Fridge' = 'fridge'
+}
+
 export const ProccesMessage = {
   REST_APP_INIT_MESSAGE: 'Rest application has been initialized on port: ',
   ENV_READ_MESSAGE: '.env file read successfully.'
