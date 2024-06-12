@@ -1,10 +1,9 @@
-import {CITY} from '../constants/common.constant.js';
+import {OfferCity} from './city-type.enum.js';
+import {Location} from './location.type.js';
 
-export type CityName = keyof typeof CITY;
-
-export type CityLocation = typeof CITY[CityName];
+export type CityName = `${OfferCity}`;
 
 export type City = {
   name: CityName;
-  location: CityLocation;
+  location: Location;
 }

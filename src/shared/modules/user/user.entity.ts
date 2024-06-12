@@ -1,29 +1,31 @@
+import {defaultClasses, getModelForClass, modelOptions, prop} from '@typegoose/typegoose';
+
 import {createSHA256} from './../../helpers/index.js';
 import {User} from '../../types/index.js';
-import {defaultClasses, getModelForClass, modelOptions, prop} from '@typegoose/typegoose';
+import {AVATAR_EXTENSION_REGEX, COLLECTION_NAME, DEFAULT_USER_AVATAR, EMAIL_REGEX, Password, UserName} from './user.constant.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface UserEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
-    collection: 'users',
+    collection: COLLECTION_NAME,
     timestamps: true
   }
 })
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class UserEntity extends defaultClasses.TimeStamps implements User {
-  @prop({required: true, min: 1, max: 15, default: ''})
+  @prop({required: true, minlength: UserName.MIN, maxlength: UserName.MAX, default: ''})
   public name: string;
 
-  @prop({required: true, unique: true, match: /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i})
+  @prop({required: true, unique: true, match: EMAIL_REGEX})
   public email: string;
 
-  @prop({match: /([^\s]+(\.(jpg|png))$)/, default: ''})
+  @prop({match: AVATAR_EXTENSION_REGEX, default: DEFAULT_USER_AVATAR})
   public avatar: string;
 
-  @prop({required: true, min: 6, max: 12, default: 'default-avatar.png'})
+  @prop({required: true, minlength: Password.MIN, maxlength: Password.MAX})
   public password: string;
 
   @prop({required: true, default: false})

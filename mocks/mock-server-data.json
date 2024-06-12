@@ -22,32 +22,25 @@
     ],
     "cities": ["Paris", "Cologne", "Brussels", "Amsterdam", "Hamburg", "Dusseldorf"],
     "images": [
-      "img/apartment-01.jpg",
-      "img/apartment-02.jpg",
-      "img/apartment-03.jpg",
-      "img/apartment-01.jpg",
-      "img/apartment-02.jpg",
-      "img/room.jpg"
+      "apartment-01.jpg",
+      "apartment-02.jpg",
+      "apartment-03.jpg",
+      "apartment-01.jpg",
+      "apartment-02.jpg",
+      "room.jpg"
     ],
     "types": ["apartment", "room", "house", "hotel"],
     "goods": [
-      "Heating",
-      "Kitchen",
-      "Cable TV",
-      "Dishwasher",
+      "Baby seat",
+      "Towels",
       "Laptop friendly workspace",
-      "Wi-Fi",
       "Breakfast",
-      "Washing machine",
       "Air conditioning",
       "Washer",
-      "Towels",
-      "Coffee machine",
       "Fridge"
     ],
     "names": ["John", "Max", "Roberta", "Beatriz"],
-    "emails": ["samere.lydon@gmail.com", "bridges@yahoo.com", "martin.toupin@hotmail.com", "perez@gmail.com"],
-    "avatars": ["img/avatar-angelina.jpg", "img/avatar-max.jpg"],
+    "avatars": ["avatar-angelina.jpg", "avatar-max.jpg"],
     "coordinates": {
       "Paris": [
         [48.868610000000004, 2.342499],

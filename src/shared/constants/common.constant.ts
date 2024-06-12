@@ -6,11 +6,11 @@ export const ENCODING = 'utf8';
 
 export const MODULES_PATH = './cli/commands';
 
-export const FILE_END_SUFFIXES = 'command.js';
+export const FILE_END_SUFFIXES = 'command.ts';
 
 export const COMMAND_PREFIX = '--';
 
-export const CHARSET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+export const DEFAULT_PASSWORD = '88888888';
 
 export const Separator = {
   VALUE_SEPARATOR: '\t',
@@ -46,28 +46,11 @@ export const CITY = {
   }
 };
 
-export enum Housing {
-  apartment = 'apartment',
-  house = 'house',
-  room = 'room',
-  hotel = 'hotel'
-}
-
-export enum Facilities {
-  'Breakfast' = 'breakfast',
-  'Air Conditioning' = 'air conditioning',
-  'Laptop friendly workspace'= 'laptop friendly workspace',
-  'BabySeat' = 'baby seat',
-  'Washer' = 'washer',
-  'Towels' = 'towels',
-  'Fridge' = 'fridge'
-}
-
-export const ProccesMessage = {
+export const ProcessMessage = {
   REST_APP_INIT_MESSAGE: 'Rest application has been initialized on port: ',
   ENV_READ_MESSAGE: '.env file read successfully.'
 };
 
-export const ErrorMessga = {
+export const ErrorMessage = {
   ENV_READ_MESSAGE: 'Can\'t read .env file.'
 };

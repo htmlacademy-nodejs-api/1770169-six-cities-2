@@ -1,10 +1,14 @@
 import {inject, injectable} from 'inversify';
+
 import {DocumentType, types} from '@typegoose/typegoose';
+
 import {CreateUserDto} from './dto/create-user.dto.js';
 import {UserService} from './user-service.interface.js';
 import {UserEntity} from './user.entity.js';
-import {Component} from '../../constants/component.constant.js';
+import {Component} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
+import {createMessage} from '../../helpers/index.js';
+import {ErrorMessage, InfoMessage} from './user.constant.js';
 
 @injectable()
 export class DefaultUserService implements UserService {
@@ -17,14 +21,14 @@ export class DefaultUserService implements UserService {
     const foundUser = await this.userModel.findOne({email: dto.email});
 
     if (foundUser !== null) {
-      throw new Error(`The user with this email: ${foundUser.email} has already been registered.`);
+      throw new Error(createMessage(ErrorMessage.CREATE_USER_MESSAGE, [foundUser.email]));
     }
 
     const user = new UserEntity(dto);
     user.setPassword(dto.password, salt);
 
-    const result = await this.userModel.create(this.userModel);
-    this.logger.info(`The user with this email: ${result.email} has been successfully registered.`);
+    const result = await this.userModel.create(user);
+    this.logger.info(createMessage(InfoMessage.CREATE_USER_MESSAGE, [result.email]));
 
     return result;
   }

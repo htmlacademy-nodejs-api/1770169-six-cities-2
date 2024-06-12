@@ -1,10 +1,11 @@
-import {Facilities, Housing} from '../constants/common.constant.js';
+
 import {City} from './city.type.js';
 import {Location} from './location.type.js';
+import {Facilities, Housing} from './offer-type.enum.js';
 import {User} from './user.type.js';
 
-export type OfferType = keyof typeof Housing;
-export type OfferFacilities = keyof typeof Facilities;
+export type OfferType = `${Housing}`;
+export type OfferFacilities = `${Facilities}`;
 
 export type Offer = {
   title: string;

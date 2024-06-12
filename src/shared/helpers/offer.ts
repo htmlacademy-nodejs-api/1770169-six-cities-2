@@ -1,4 +1,4 @@
-import {RADIX, Separator} from '../constants/index.js';
+import {DEFAULT_PASSWORD, RADIX, Separator} from '../constants/index.js';
 import {CityName, Offer, OfferFacilities, OfferType} from '../types/index.js';
 
 export const createOffer = (offerData: string): Offer => {
@@ -22,7 +22,6 @@ export const createOffer = (offerData: string): Offer => {
     userName,
     email,
     avatar,
-    password,
     isPro,
     comments,
     latitude,
@@ -54,7 +53,7 @@ export const createOffer = (offerData: string): Offer => {
       name: userName,
       email,
       avatar,
-      password,
+      password: DEFAULT_PASSWORD,
       isPro: Boolean(isPro)
     },
     comments: Number.parseInt(comments, RADIX),
