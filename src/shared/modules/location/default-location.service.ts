@@ -1,6 +1,6 @@
-import {DocumentType, types} from '@typegoose/typegoose';
-
 import {inject, injectable} from 'inversify';
+
+import {DocumentType, types} from '@typegoose/typegoose';
 
 import {Component} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';

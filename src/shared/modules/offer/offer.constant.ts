@@ -37,7 +37,7 @@ export const Price = {
 };
 
 export const InfoMessage = {
-  CREATE_OFFER_MESSAGE: 'New "%offerName%" offer has been successfully created.',
-  UPDATE_OFFER_MESSAGE: 'The "%offerName%" offer has been successfully updated.',
-  DELETE_OFFER_MESSAGE: 'The "%offerName%" offer has been successfully deleted.'
+  CREATE_OFFER_MESSAGE: 'New \'%offerName%\' offer has been successfully created.',
+  UPDATE_OFFER_MESSAGE: 'The \'%offerName%\' offer has been successfully updated.',
+  DELETE_OFFER_MESSAGE: 'The \'%offerName%\' offer has been successfully deleted.'
 };

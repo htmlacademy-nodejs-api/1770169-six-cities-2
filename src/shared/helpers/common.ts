@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+
 import {randomBytes} from 'node:crypto';
 
 export const getRandomNumber = (min: number, max: number, numAfterDigit = 0): number => +(Math.random() * (max - min) + min).toFixed(numAfterDigit);
@@ -29,6 +30,6 @@ export const getRandomDate = (fromDate: string, toDate: string): string => {
 
 export const getErrorMessage = (error: unknown): string => error instanceof Error ? error.message : '';
 
-export const createMessage = (message: string, expressions: string[] = []): string => (
-  expressions.reduce((accumulator: string, currentValue) => accumulator.replace(/%([^%]*)%/, currentValue), message)
+export const createMessage = <T>(message: string, expressions: T[] = []): string => (
+  expressions.reduce((accumulator: string, currentValue: T) => accumulator.replace(/%([^%]*)%/, String(currentValue)), message)
 );

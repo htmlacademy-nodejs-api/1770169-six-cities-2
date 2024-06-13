@@ -2,7 +2,14 @@ import {defaultClasses, getModelForClass, modelOptions, prop} from '@typegoose/t
 
 import {createSHA256} from './../../helpers/index.js';
 import {User} from '../../types/index.js';
-import {AVATAR_EXTENSION_REGEX, COLLECTION_NAME, DEFAULT_USER_AVATAR, EMAIL_REGEX, Password, UserName} from './user.constant.js';
+import {
+  AVATAR_EXTENSION_REGEX,
+  COLLECTION_NAME,
+  DEFAULT_USER_AVATAR,
+  EMAIL_REGEX,
+  Password,
+  UserName
+} from './user.constant.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface UserEntity extends defaultClasses.Base {}

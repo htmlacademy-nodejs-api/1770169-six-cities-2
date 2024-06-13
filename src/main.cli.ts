@@ -6,7 +6,7 @@ import chalk from 'chalk';
 
 import {CLIApplication} from './cli/cli-application.js';
 import {Command} from './cli/commands/command.interface.js';
-import {FILE_END_SUFFIXES, MODULES_PATH} from './shared/constants/index.js';
+import {FILE_END_SUFFIXES, MODULES_PATH} from './cli/cli.constant.js';
 import {getErrorMessage} from './shared/helpers/index.js';
 
 async function importModules(directory: string) {

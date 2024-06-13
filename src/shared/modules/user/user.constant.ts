@@ -14,9 +14,9 @@ export const UserName = {
 };
 
 export const InfoMessage = {
-  CREATE_USER_MESSAGE: 'The user with this email: "%email%" has been successfully registered.',
+  CREATE_USER_MESSAGE: 'The user with this email: \'%email%\' has been successfully registered.',
 };
 
 export const ErrorMessage = {
-  CREATE_USER_MESSAGE: 'The user with this email "%email%" has already been registered.',
+  CREATE_USER_MESSAGE: 'The user with this email \'%email%\' has already been registered.',
 };

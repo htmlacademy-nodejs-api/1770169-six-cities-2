@@ -1,4 +1,5 @@
 import {Container} from 'inversify';
+
 import {Component} from '../shared/constants/index.js';
 import {RestApplication} from './index.js';
 import {PinoLogger} from '../shared/libs/logger/index.js';

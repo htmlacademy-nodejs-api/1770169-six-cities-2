@@ -39,7 +39,15 @@ export default class ImportCommand implements Command {
     return this.name;
   }
 
-  public async execute(filename: string, userName: string, password: string, host: string, port: string, dbname: string, salt: string): Promise<void> {
+  public async execute(
+    filename: string,
+    userName: string,
+    password: string,
+    host: string,
+    port: string,
+    dbname: string,
+    salt: string
+  ): Promise<void> {
     const uri = getMongoURI(userName, password, host, port, dbname);
     this.salt = salt;
 
@@ -69,7 +77,7 @@ export default class ImportCommand implements Command {
   };
 
   private onCompleteImport = (count: number) => {
-    console.info(chalk.yellow(createMessage(InfoMessage.COUNT_ROW_IMPORTED_INFO, [count.toString()])));
+    console.info(chalk.yellow(createMessage(InfoMessage.COUNT_ROW_IMPORTED_INFO, [count])));
     this.databaseClient.disconnect();
   };
 

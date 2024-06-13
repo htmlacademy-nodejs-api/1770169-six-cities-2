@@ -1,4 +1,4 @@
-import {COMMAND_PREFIX} from '../shared/constants/index.js';
+import {COMMAND_PREFIX} from './cli.constant.js';
 
 type ParsedCommand = Record<string, string[]>;
 

@@ -1,4 +1,5 @@
 import {Container} from 'inversify';
+
 import {RestApplication} from './rest/index.js';
 import {Component} from './shared/constants/index.js';
 import {createRestApplicationContainer} from './rest/index.js';

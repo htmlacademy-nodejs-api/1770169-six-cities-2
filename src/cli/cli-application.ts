@@ -1,3 +1,5 @@
+import {ErrorMessage} from './cli.constant.js';
+import {createMessage} from '../shared/helpers/index.js';
 import CommandParser from './command-parser.js';
 import {CommandName} from './commands/command.constant.js';
 import {Command} from './commands/command.interface.js';
@@ -18,7 +20,7 @@ export class CLIApplication {
   public registerCommands(commands: Command[]) {
     commands.forEach((command) => {
       if (Object.hasOwn(this.commands, command.name)) {
-        throw new Error(`Command ${command.name} is already registered.`);
+        throw new Error(createMessage(ErrorMessage.COMMAND_REGISTERED_MESSAGE, [command.name]));
       }
 
       this.commands[command.name] = command;
@@ -35,7 +37,7 @@ export class CLIApplication {
 
   private getDefaultCommand(): Command | never {
     if (!this.commands[this.defaultCommand]) {
-      throw new Error(`The default command "${this.defaultCommand}" is not registered.`);
+      throw new Error(createMessage(ErrorMessage.COMMAND_NOT_REGISTERED_MESSAGE, [this.defaultCommand]));
     }
     return this.commands[this.defaultCommand];
   }
