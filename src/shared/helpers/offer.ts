@@ -1,5 +1,5 @@
-import {RADIX, Separator} from '../constants/index.js';
-import {CityName, Offer} from '../types/index.js';
+import {DEFAULT_PASSWORD, RADIX, Separator} from '../constants/index.js';
+import {CityName, Offer, OfferFacilities, OfferType} from '../types/index.js';
 
 export const createOffer = (offerData: string): Offer => {
   const [
@@ -22,7 +22,6 @@ export const createOffer = (offerData: string): Offer => {
     userName,
     email,
     avatar,
-    password,
     isPro,
     comments,
     latitude,
@@ -45,16 +44,16 @@ export const createOffer = (offerData: string): Offer => {
     isPremium: Boolean(isPremium),
     isFavorite: Boolean(isFavorite),
     rating: Number.parseFloat(rating),
-    type,
+    type: type as OfferType,
     bedrooms: Number.parseInt(bedrooms, RADIX),
     maxGuests: Number.parseInt(maxGuests, RADIX),
     price: Number.parseInt(price, RADIX),
-    goods: goods.split(Separator.ENUMERATION_SEPARATOR).map((good) => good),
+    goods: goods.split(Separator.ENUMERATION_SEPARATOR).map((good) => good) as OfferFacilities[],
     host: {
       name: userName,
       email,
       avatar,
-      password,
+      password: DEFAULT_PASSWORD,
       isPro: Boolean(isPro)
     },
     comments: Number.parseInt(comments, RADIX),

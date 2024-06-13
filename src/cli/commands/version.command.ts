@@ -5,7 +5,9 @@ import chalk from 'chalk';
 
 import {CommandName, ErrorMessage} from './command.constant.js';
 import {Command} from './command.interface.js';
-import {getErrorMessage} from '../../shared/helpers/index.js';
+import {createMessage, getErrorMessage} from '../../shared/helpers/index.js';
+import {ENCODING} from '../../shared/constants/index.js';
+import {GET_VERSION_FILE_PATH} from '../cli.constant.js';
 
 type PackageJSONConfig = {
   version: string;
@@ -24,7 +26,7 @@ export default class VersionCommand implements Command {
   readonly name: string = CommandName.Version;
 
   constructor(
-    private readonly filePath: string = './package.json'
+    private readonly filePath: string = GET_VERSION_FILE_PATH
   ) {}
 
   public get(): string {
@@ -36,14 +38,14 @@ export default class VersionCommand implements Command {
       const version = this.readVersion();
       console.info(chalk.yellow(version));
     } catch(error: unknown) {
-      console.error(chalk.red(`Can't read version from ${this.filePath}.`));
+      console.error(chalk.red(createMessage(ErrorMessage.READ_VERSION_ERROR, [this.filePath])));
       console.error(chalk.red(getErrorMessage(error)));
     }
   }
 
   private readVersion() {
     const filePath = resolve(this.filePath);
-    const readFile = readFileSync(filePath, {encoding: 'utf8'});
+    const readFile = readFileSync(filePath, {encoding: ENCODING});
     const content: unknown = JSON.parse(readFile);
 
     if (!isPackageJSONConfig(content)) {

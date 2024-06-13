@@ -2,12 +2,12 @@ import got from 'got';
 
 import chalk from 'chalk';
 
-import {CommandName, ErrorMessage} from './command.constant.js';
+import {CommandName, ErrorMessage, InfoMessage} from './command.constant.js';
 import {Command} from './command.interface.js';
 import {MockServerDataType} from '../../shared/types/index.js';
 import {TsvOfferGenerate} from '../../shared/libs/data-generate/index.js';
 import {TsvFileWriter} from '../../shared/libs/file-writer/index.js';
-import {getErrorMessage} from '../../shared/helpers/index.js';
+import {createMessage, getErrorMessage} from '../../shared/helpers/index.js';
 import {RADIX} from '../../shared/constants/index.js';
 
 export default class GenerateCommand implements Command {
@@ -25,7 +25,7 @@ export default class GenerateCommand implements Command {
     try {
       await this.load(url);
       await this.write(filepath, offerCount);
-      console.info(chalk.yellow(`File ${filepath} was created!`));
+      console.info(chalk.yellow(createMessage(InfoMessage.FILE_CREATE_INFO, [filepath])));
     } catch (error: unknown) {
       console.error(chalk.red(ErrorMessage.GENERATE_DATA_ERROR));
       console.error(chalk.red(getErrorMessage(error)));
@@ -44,7 +44,7 @@ export default class GenerateCommand implements Command {
     const tsvOfferGenerate = new TsvOfferGenerate(this.initialData);
     const tsvFileWriter = new TsvFileWriter(filepath);
 
-    for (let i = 0; i <= offerCount; i++) {
+    for (let i = 1; i <= offerCount; i++) {
       await tsvFileWriter.write(tsvOfferGenerate.generate());
     }
   }

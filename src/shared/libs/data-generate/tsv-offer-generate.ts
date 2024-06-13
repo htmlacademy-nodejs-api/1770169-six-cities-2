@@ -1,8 +1,8 @@
 import {
-  generatePassword,
   getRandomDate,
   getRandomElementFromArray,
   getRandomElementsFromArray,
+  getRandomEmail,
   getRandomNumber
 } from '../../helpers/index.js';
 import {MockServerDataType} from '../../types/index.js';
@@ -42,9 +42,8 @@ export class TsvOfferGenerate implements DataGenerate {
     const price = getRandomNumber(Price.MIN, Price.MAX);
     const goods = getRandomElementsFromArray(this.mockData.goods).join(Separator.ENUMERATION_SEPARATOR);
     const userName = getRandomElementFromArray(this.mockData.names);
-    const email = getRandomElementFromArray(this.mockData.emails);
+    const email = getRandomEmail();
     const avatar = getRandomElementFromArray(this.mockData.avatars);
-    const password = generatePassword();
     const isPro = !!getRandomNumber(NumericValue.FALSE, NumericValue.TRUE);
     const comments = getRandomNumber(Comment.MIN, Comment.MAX);
     const [lat, lng] = getRandomElementFromArray(this.mockData.coordinates[city]);
@@ -71,7 +70,6 @@ export class TsvOfferGenerate implements DataGenerate {
       userName,
       email,
       avatar,
-      password,
       isPro,
       comments,
       latitude,

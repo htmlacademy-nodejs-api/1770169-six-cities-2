@@ -8,7 +8,6 @@ export type MockServerDataType = {
   types: string[];
   goods: string[];
   names: string[];
-  emails: string[];
   avatars: string[];
   coordinates: {
     [Name in CityName]: [number, number][]
