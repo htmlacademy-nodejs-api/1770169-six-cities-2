@@ -32,19 +32,19 @@ export class TsvOfferGenerate implements DataGenerate {
     const cityLatitude = CITY[city].latitude;
     const cityLongitude = CITY[city].longitude;
     const previewImage = getRandomElementFromArray(this.mockData.images);
-    const images = getRandomElementsFromArray(this.mockData.images, MAX_IMAGE_VIEW).join(Separator.ENUMERATION_SEPARATOR);
-    const isPremium = !!getRandomNumber(NumericValue.FALSE, NumericValue.TRUE);
-    const isFavorite = !!getRandomNumber(NumericValue.FALSE, NumericValue.TRUE);
+    const images = getRandomElementsFromArray(this.mockData.images, MAX_IMAGE_VIEW).join(Separator.Enumeration);
+    const isPremium = !!getRandomNumber(NumericValue.False, NumericValue.True);
+    const isFavorite = !!getRandomNumber(NumericValue.False, NumericValue.True);
     const rating = getRandomNumber(Rating.MIN, Rating.MAX, 1);
     const type = getRandomElementFromArray(this.mockData.types);
     const bedrooms = getRandomNumber(Bedroom.MIN, Bedroom.MAX);
     const maxGuests = getRandomNumber(Guest.MIN, Guest.MAX);
     const price = getRandomNumber(Price.MIN, Price.MAX);
-    const goods = getRandomElementsFromArray(this.mockData.goods).join(Separator.ENUMERATION_SEPARATOR);
+    const goods = getRandomElementsFromArray(this.mockData.goods).join(Separator.Enumeration);
     const userName = getRandomElementFromArray(this.mockData.names);
     const email = getRandomEmail();
     const avatar = getRandomElementFromArray(this.mockData.avatars);
-    const isPro = !!getRandomNumber(NumericValue.FALSE, NumericValue.TRUE);
+    const isPro = !!getRandomNumber(NumericValue.False, NumericValue.True);
     const comments = getRandomNumber(Comment.MIN, Comment.MAX);
     const [lat, lng] = getRandomElementFromArray(this.mockData.coordinates[city]);
     const latitude = lat;
@@ -74,6 +74,6 @@ export class TsvOfferGenerate implements DataGenerate {
       comments,
       latitude,
       longitude
-    ].join(Separator.VALUE_SEPARATOR);
+    ].join(Separator.Value);
   }
 }

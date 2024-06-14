@@ -1,6 +1,7 @@
-export const RETRY_COUNT = 5;
-
-export const RETRY_TIMEOUT = 1000;
+export enum Retry {
+  Count = 5,
+  Timeout = 1000
+}
 
 export const InfoMessage = {
   TRYING_CONNECT_MESSAGE: 'Trying to connect to database…',

@@ -8,7 +8,7 @@ import {OfferEntity} from './offer.entity.js';
 import {Component} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {createMessage} from '../../helpers/index.js';
-import {MAX_OFFERS_VIEW, MAX_PREMIUM_OFFERS_VIEW, InfoMessage} from './offer.constant.js';
+import {MaxView, InfoMessage} from './offer.constant.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -43,7 +43,7 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async find(): Promise<DocumentType<OfferEntity>[]> {
-    return await this.offerModel.find().limit(MAX_OFFERS_VIEW);
+    return await this.offerModel.find().limit(MaxView.Offer);
   }
 
   public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
@@ -51,7 +51,7 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async findByPremium(cityName: string): Promise<DocumentType<OfferEntity>[]> {
-    return await this.offerModel.find({city: {name: cityName}, isPremium: true}).limit(MAX_PREMIUM_OFFERS_VIEW);
+    return await this.offerModel.find({city: {name: cityName}, isPremium: true}).limit(MaxView.PremiumOffer);
   }
 
   public async findByFavorite(): Promise<DocumentType<OfferEntity>[]> {

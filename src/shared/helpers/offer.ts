@@ -26,7 +26,7 @@ export const createOffer = (offerData: string): Offer => {
     comments,
     latitude,
     longitude,
-  ] = offerData.replace(Separator.LINE_SEPARATOR, Separator.EMPTY_SEPARATOR).split(Separator.VALUE_SEPARATOR);
+  ] = offerData.replace(Separator.Line, Separator.Empty).split(Separator.Value);
 
   return {
     title,
@@ -40,7 +40,7 @@ export const createOffer = (offerData: string): Offer => {
       }
     },
     previewImage,
-    images: images.split(Separator.ENUMERATION_SEPARATOR).map((image) => image),
+    images: images.split(Separator.Enumeration).map((image) => image),
     isPremium: Boolean(isPremium),
     isFavorite: Boolean(isFavorite),
     rating: Number.parseFloat(rating),
@@ -48,7 +48,7 @@ export const createOffer = (offerData: string): Offer => {
     bedrooms: Number.parseInt(bedrooms, RADIX),
     maxGuests: Number.parseInt(maxGuests, RADIX),
     price: Number.parseInt(price, RADIX),
-    goods: goods.split(Separator.ENUMERATION_SEPARATOR).map((good) => good) as OfferFacilities[],
+    goods: goods.split(Separator.Enumeration).map((good) => good) as OfferFacilities[],
     host: {
       name: userName,
       email,

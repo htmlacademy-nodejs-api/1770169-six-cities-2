@@ -23,7 +23,7 @@ export interface UserEntity extends defaultClasses.Base {}
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class UserEntity extends defaultClasses.TimeStamps implements User {
-  @prop({required: true, minlength: UserName.MIN, maxlength: UserName.MAX, default: ''})
+  @prop({required: true, minlength: UserName.Min, maxlength: UserName.Max, default: ''})
   public name: string;
 
   @prop({required: true, unique: true, match: EMAIL_REGEX})
@@ -32,7 +32,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({match: AVATAR_EXTENSION_REGEX, default: DEFAULT_USER_AVATAR})
   public avatar: string;
 
-  @prop({required: true, minlength: Password.MIN, maxlength: Password.MAX})
+  @prop({required: true, minlength: Password.Min, maxlength: Password.Max})
   public password: string;
 
   @prop({required: true, default: false})
