@@ -1,5 +1,6 @@
 import {DEFAULT_PASSWORD, RADIX, Separator} from '../constants/index.js';
 import {CityName, Offer, OfferFacilities, OfferType} from '../types/index.js';
+import {UserType} from '../types/user-type.enum.js';
 
 export const createOffer = (offerData: string): Offer => {
   const [
@@ -22,7 +23,7 @@ export const createOffer = (offerData: string): Offer => {
     userName,
     email,
     avatar,
-    isPro,
+    userType,
     comments,
     latitude,
     longitude,
@@ -49,12 +50,12 @@ export const createOffer = (offerData: string): Offer => {
     maxGuests: Number.parseInt(maxGuests, RADIX),
     price: Number.parseInt(price, RADIX),
     goods: goods.split(Separator.Enumeration).map((good) => good) as OfferFacilities[],
-    host: {
+    user: {
       name: userName,
       email,
       avatar,
       password: DEFAULT_PASSWORD,
-      isPro: Boolean(isPro)
+      userType: userType as UserType
     },
     comments: Number.parseInt(comments, RADIX),
     location: {

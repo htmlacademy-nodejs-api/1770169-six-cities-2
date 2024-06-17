@@ -69,7 +69,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public goods: OfferFacilities[];
 
   @prop({required: true, ref: UserEntity})
-  public host: Ref<UserEntity>;
+  public user: Ref<UserEntity>;
 
   @prop({required: true})
   public comments: number;

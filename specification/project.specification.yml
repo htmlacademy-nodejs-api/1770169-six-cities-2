@@ -1,0 +1,670 @@
+openapi: 3.0.2
+info:
+  title: Описание API сервера проекта «Шесть Городов»
+  description: Описание маршрутов сервера проекта.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: "1.0.0"
+tags:
+  - name: offers
+    description: Действия с предложениями.
+  - name: favorite
+    description: Действия с избранными предложениями.
+  - name: premium
+    description: Действия с премиальными предложениями.
+  - name: user
+    description: Действия с пользователем.
+  - name: comments
+    description: Действия с комментариями.
+paths:
+  /six-cities/offers:
+    get:
+      tags:
+        - offers
+      summary: Список предложений по аренде
+      description: Сервис возвращает список из не более 60 предложений по аренде, отсортированный по дате публикации (по убыванию).
+        Клиент также может запросить больше предложений, указав нужное количество в параметре запроса.
+      parameters:
+        - name: count
+          in: query
+          description: Необходимое количество предложений
+          schema:
+            type: string
+            example: 20
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "200":
+          description: Массив предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MinimumOffer"
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения
+      description: Сервис предоставляет ресурс для создания новых предложений.
+        В случае успешного создания предложения сервис в ответе возвращает информацию о созданном предложении.
+        Создавать предложения могут только авторизованные клиенты.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      requestBody:
+        description: Объект с новым предложением
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Offer"
+      responses:
+        "201":
+          description: Объект с созданным предложением
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FullOffer"
+        "401":
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthError"
+  /six-cities/offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Детальная информация по предложению
+      description: Сервис возвращает детальную информацию по одному предложению с идентификатором `offerId`.
+      parameters:
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: string
+            example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "200":
+          description: Объект предложения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FullOffer"
+        "404":
+          description: Предложение не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+    put:
+      tags:
+        - offers
+      summary: Редактирование предложения
+      description: Сервис предоставляет ресурс для редактирования предложения по аренде с идентификатором `offerId`.
+        В случае успешного обновления предложения сервис возвращает клиенту обновлённый объект предложения.
+        Редактировать предложения по аренде могут только авторизованные клиенты.
+      parameters:
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: string
+            example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      requestBody:
+        description: Объект с измененным предложением
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Offer"
+      responses:
+        "200":
+          description: Объект с обновлённым предложением
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FullOffer"
+        "401":
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthError"
+        "404":
+          description: Предложение не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+    delete:
+      tags:
+        - offers
+      summary: Удаление предложения по аренде
+      description: Сервис предоставляет ресурс для удаления предложений по аренде с идентификатором `offerId`.
+        Удалять предложения могут только авторизованные клиенты.
+      parameters:
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: string
+            example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "204":
+          description: Предложение удалено
+        "401":
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthError"
+        "404":
+          description: Предложение не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+  /six-cities/favorite:
+    get:
+      tags:
+        - favorite
+      summary: Список избранных предложений
+      description: Сервис предоставляет ресурс для получения предложений, добавленных в избранное.
+        Ресурс доступен только авторизованным клиентам.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "200":
+          description: Массив предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MinimumOffer"
+        "401":
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthError"
+  /six-cities/premium:
+    get:
+      tags:
+        - premium
+      summary: Премиальные предложения для города
+      description: Сервис предоставляет ресурс для получения списка из не более 3 премиальных предложений для определённого города, отсортированный по дате публикации (по убыванию).
+      parameters:
+        - name: city
+          in: query
+          description: Город для которого необходимо получить премиальные предложения
+          required: true
+          schema:
+            type: string
+            enum:
+            - "Paris"
+            - "Cologne"
+            - "Brussels"
+            - "Amsterdam"
+            - "Hamburg"
+            - "Dusseldorf"
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "200":
+          description: Массив предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MinimumOffer"
+  /six-cities/premium/{offerId}/{status}:
+    post:
+      tags:
+        - premium
+      summary: Добавление и удаление предложения в/из избранного
+      description: Сервис предоставляет ресурс для добавления и удаления любого предложения в/из списка избранных предложений с идентификатором `offerId`.
+        Ресурс доступен только авторизованным клиентам.
+      parameters:
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: string
+            example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+        - name: status
+          in: path
+          description: Статус избранного предложения. Может быть `1` или `0`, где `1`
+            добавляет предложение в избранное, а `0` удаляет
+          required: true
+          schema:
+            type: number
+            example: 1
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "204":
+          description: Предложение добавлено или удалено в/из списка избранных предложений
+        "401":
+            description: Пользователь не авторизован
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/AuthError"
+        "404":
+          description: Предложение не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+  /six-cities/sign-up:
+    post:
+      tags:
+        - user
+      summary: Создание нового пользователя
+      description: Сервис предоставляет ресурс для создания нового пользователя.
+        В случае успешного создания пользователя сервис возвращает информацию о созданном пользователе.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      requestBody:
+        description: Объект с новым пользователем
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: Объект c созданным пользователем
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /six-cities/sign-in:
+    post:
+      tags:
+        - user
+      summary: Вход в закрытую часть приложения
+      description: Сервис предоставляет ресурс для аутентификации и авторизации пользователя.
+        Для входа в закрытую часть приложения клиент передаёт логин (email) и пароль пользователя.
+        В случае успешной проверки логина и пароля сервис возвращает клиенту токен.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      requestBody:
+        description: Объект с пользователем
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MinimumUser"
+      responses:
+        "200":
+          description: Объект c токеном
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthInfo"
+        "401":
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthError"
+    get:
+      tags:
+        - user
+      summary: Проверка состояния пользователя
+      description: Сервис предоставляет ресурс для проверки состояния клиента — авторизован или нет.
+        Если клиент авторизован, сервис возвращает соответствующий код состояния и информацию о пользователе.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "200":
+          description: Статус авторизации пользователя
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthError"
+  /six-cities/sign-out:
+    post:
+      tags:
+        - user
+      summary: Выход из закрытой части приложения
+      description: Сервис предоставляет ресурс для завершения пользовательского сеанса.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "204":
+          description: Сеанс завершён
+  /six-cities/comments/{offerId}:
+    get:
+      tags:
+        - comments
+      summary: Список комментариев для предложения
+      description: Сервис возвращает список из не более 50 комментариев для определённого предложения, отсортированный по дате публикации (по убыванию).
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "200":
+          description: Массив с комментариями для предложения
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+        "404":
+          description: Предложение не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+    post:
+      tags:
+        - comments
+      summary: Добавление комментария
+      description: Сервис предоставляет ресурс для добавления комментариев к определённому предложению по аренде.
+        Добавлять комментарии могут только авторизованные клиенты.
+        В случае успешного добавления комментария сервис возвращает информацию о созданном комментарии.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      requestBody:
+        description: Объект с новым комментарием
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MinimumComment"
+      responses:
+        "201":
+          description: Объект с созданным комментарием
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        "404":
+          description: Предложение не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+components:
+  schemas:
+    MinimumUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: john@yahoo.com
+        password:
+          type: string
+          writeOnly: true
+          example: 123456
+    User:
+      allOf:
+        - $ref: "#/components/schemas/MinimumUser"
+        - type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+        name:
+          type: string
+          example: John
+        avatar:
+          type: string
+          example: default-avatar.png
+        type:
+          type: string
+          enum:
+            - "regular"
+            - "pro"
+    City:
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+            - "Paris"
+            - "Cologne"
+            - "Brussels"
+            - "Amsterdam"
+            - "Hamburg"
+            - "Dusseldorf"
+        location:
+          $ref: "#/components/schemas/Location"
+    Location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          example: 50.916361
+        longitude:
+          type: number
+          example: 6.944974
+    MinimumOffer:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+        title:
+          type: string
+          example: Loft Studio in the Central Area
+        date:
+          type: string
+          example: 2022-01-18T17:36:34.064Z
+        city:
+          $ref: "#/components/schemas/City"
+        previewImage:
+          type: string
+          example: apartment.jpg
+        isPremium:
+          type: boolean
+          example: true
+        isFavorite:
+          type: boolean
+          example: true
+        rating:
+          type: number
+          example: 4
+        type:
+          type: string
+          enum:
+            - "apartment"
+            - "house"
+            - "room"
+            - "hotel"
+        price:
+          type: number
+          example: 300
+        commentsCount:
+          type: number
+          readOnly: true
+          example: 5
+    Offer:
+      allOf:
+        - $ref: "#/components/schemas/MinimumOffer"
+        - type: object
+          properties:
+            description:
+              type: string
+              example: Peaceful studio in the most wanted area in town.
+            images:
+              type: array
+              items:
+                type: string
+                example: apartment-01.jpg
+            bedrooms:
+              type: number
+              example: 2
+            maxGuests:
+              type: number
+              example: 4
+            goods:
+              type: array
+              items:
+                type: string
+                enum:
+                  - "Breakfast"
+                  - "Air conditioning"
+                  - "Laptop friendly workspace"
+                  - "Baby seat"
+                  - "Washer"
+                  - "Towels"
+                  - "Fridge"
+            location:
+              $ref: "#/components/schemas/Location"
+    FullOffer:
+      allOf:
+        - $ref: "#/components/schemas/Offer"
+        - type: object
+          properties:
+            user:
+              $ref: "#/components/schemas/User"
+    MinimumComment:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+        comment:
+          type: string
+          example: These top places to visit in Amsterdam
+        date:
+          type: string
+          example: 2022-01-18T17:36:34.064Z
+        rating:
+          type: number
+          example: 4
+    Comment:
+      allOf:
+        - $ref: "#/components/schemas/MinimumComment"
+        - type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+    AuthInfo:
+      properties:
+        token:
+          type: string
+          example: T2VyLm5lckBnbWFpbC5jb20
+    AuthError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Access deny.
+    NotFoundError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Offer with id 6af6f711-c28d-4121-82cd-e0b462a27f00 not found.
+    NotAuthError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Failed to sign in.
+

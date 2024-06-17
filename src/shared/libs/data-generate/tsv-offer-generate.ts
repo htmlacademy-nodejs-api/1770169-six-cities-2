@@ -18,6 +18,7 @@ import {
   Price,
   Rating
 } from './data-generate.constant.js';
+import {UserType} from '../../types/user-type.enum.js';
 
 export class TsvOfferGenerate implements DataGenerate {
   constructor(
@@ -44,7 +45,7 @@ export class TsvOfferGenerate implements DataGenerate {
     const userName = getRandomElementFromArray(this.mockData.names);
     const email = getRandomEmail();
     const avatar = getRandomElementFromArray(this.mockData.avatars);
-    const isPro = !!getRandomNumber(NumericValue.False, NumericValue.True);
+    const userType = getRandomElementFromArray(Object.values(UserType));
     const comments = getRandomNumber(Comment.MIN, Comment.MAX);
     const [lat, lng] = getRandomElementFromArray(this.mockData.coordinates[city]);
     const latitude = lat;
@@ -70,7 +71,7 @@ export class TsvOfferGenerate implements DataGenerate {
       userName,
       email,
       avatar,
-      isPro,
+      userType,
       comments,
       latitude,
       longitude

@@ -82,7 +82,7 @@ export default class ImportCommand implements Command {
   };
 
   private async saveOffer(offer: Offer) {
-    const user = await this.userService.create(offer.host, this.salt);
+    const user = await this.userService.create(offer.user, this.salt);
     const cityLocation = await this.locationService.create(offer.city.location);
     const city = await this.cityService.create({
       name: offer.city.name,
@@ -92,7 +92,7 @@ export default class ImportCommand implements Command {
     await this.offerService.create({
       ...offer,
       city: city.id,
-      host: user.id,
+      user: user.id,
       location: location.id
     });
   }

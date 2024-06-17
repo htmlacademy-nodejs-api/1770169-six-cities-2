@@ -10,6 +10,7 @@ import {
   Password,
   UserName
 } from './user.constant.js';
+import {UserType} from '../../types/user-type.enum.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface UserEntity extends defaultClasses.Base {}
@@ -36,7 +37,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   public password: string;
 
   @prop({required: true, default: false})
-  public isPro: boolean;
+  public userType: `${UserType}`;
 
   constructor (data: User) {
     super();
@@ -44,7 +45,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     this.name = data.name;
     this.email = data.email;
     this.avatar = data.avatar;
-    this.isPro = data.isPro;
+    this.userType = data.userType;
   }
 
   public getPassword() {
