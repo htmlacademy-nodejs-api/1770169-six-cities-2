@@ -30,7 +30,7 @@ export const Date = {
   TO: '2024-05-01'
 };
 
-export const NumericValue = {
-  TRUE: 1,
-  FALSE: 0
-};
+export enum NumericValue {
+  True = 1,
+  False = 0
+}
