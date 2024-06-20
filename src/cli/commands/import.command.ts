@@ -50,8 +50,7 @@ export default class ImportCommand implements Command {
   ): Promise<void> {
     const uri = getMongoURI(userName, password, host, port, dbname);
     this.salt = salt;
-
-    await this.databaseClient.connect(uri);
+    this.databaseClient.connect(uri);
 
     if (!filename) {
       throw new Error(ErrorMessage.UNSPECIFIED_PATH_ERROR);
@@ -91,9 +90,9 @@ export default class ImportCommand implements Command {
     const location = await this.locationService.create(offer.location);
     await this.offerService.create({
       ...offer,
-      city: city.id,
-      user: user.id,
-      location: location.id
+      cityId: city.id,
+      userId: user.id,
+      locationId: location.id
     });
   }
 }

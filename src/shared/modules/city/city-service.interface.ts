@@ -5,4 +5,5 @@ import {CreateCityDto} from './dto/create-city.dto.js';
 
 export interface CityService {
   create(dto: CreateCityDto): Promise<DocumentType<CityEntity>>;
+  findByCityName(cityName: string): Promise<DocumentType<CityEntity> | null>;
 }

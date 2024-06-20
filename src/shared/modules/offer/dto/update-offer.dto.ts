@@ -1,6 +1,7 @@
 import {OfferFacilities, OfferType} from '../../../types/index.js';
 
-export class CreateOfferDto {
+export class UpdateOfferDto {
+  public offerId: string;
   public title: string;
   public description: string;
   public date: Date;
@@ -14,7 +15,7 @@ export class CreateOfferDto {
   public bedrooms: number;
   public maxGuests: number;
   public price: number;
-  public goods: OfferFacilities[];
+  public goods: OfferFacilities;
   public userId: string;
   public locationId: string;
 }

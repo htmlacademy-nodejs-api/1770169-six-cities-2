@@ -517,18 +517,20 @@ components:
           enum:
             - "regular"
             - "pro"
+    CityName:
+      type: string
+      enum:
+        - "Paris"
+        - "Cologne"
+        - "Brussels"
+        - "Amsterdam"
+        - "Hamburg"
+        - "Dusseldorf"
     City:
       type: object
       properties:
         name:
-          type: string
-          enum:
-            - "Paris"
-            - "Cologne"
-            - "Brussels"
-            - "Amsterdam"
-            - "Hamburg"
-            - "Dusseldorf"
+          $ref: "#/components/schemas/CityName"
         location:
           $ref: "#/components/schemas/Location"
     Location:

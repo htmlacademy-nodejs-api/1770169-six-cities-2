@@ -18,7 +18,7 @@ export class DefaultUserService implements UserService {
   ) {}
 
   public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
-    const foundUser = await this.userModel.findOne({email: dto.email});
+    const foundUser = await this.userModel.findOne({email: dto.email}).exec();
 
     if (foundUser !== null) {
       throw new Error(createMessage(ErrorMessage.CREATE_USER_MESSAGE, [foundUser.email]));
@@ -34,10 +34,10 @@ export class DefaultUserService implements UserService {
   }
 
   public async findByEmail(email: string): Promise<DocumentType<UserEntity> | null> {
-    return await this.userModel.findOne({email: email});
+    return await this.userModel.findOne({email: email}).exec();
   }
 
-  public async findById(id: string): Promise<DocumentType<UserEntity> | null> {
-    return await this.userModel.findById(id);
+  public async findById(userId: string): Promise<DocumentType<UserEntity> | null> {
+    return await this.userModel.findById(userId).exec();
   }
 }
