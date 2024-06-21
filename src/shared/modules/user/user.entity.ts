@@ -31,7 +31,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   public email: string;
 
   @prop({match: AVATAR_EXTENSION_REGEX, default: DEFAULT_USER_AVATAR})
-  public avatar: string;
+  public avatar?: string;
 
   @prop({required: true, minlength: Password.Min, maxlength: Password.Max})
   public password: string;

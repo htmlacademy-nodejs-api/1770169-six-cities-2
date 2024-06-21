@@ -39,5 +39,122 @@ export enum Price {
 export const InfoMessage = {
   CREATE_OFFER_MESSAGE: 'New \'%offerName%\' offer has been successfully created.',
   UPDATE_OFFER_MESSAGE: 'The \'%offerName%\' offer has been successfully updated.',
-  DELETE_OFFER_MESSAGE: 'The \'%offerName%\' offer has been successfully deleted.'
+};
+
+export const AGGREGATION_OPERATIONS = {
+  User: [
+    {
+      $lookup: {
+        from: 'user',
+        localField: 'userId',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    {$unwind: '$user'}
+  ],
+  City: [
+    {
+      $lookup: {
+        from: 'city',
+        localField: 'cityId',
+        foreignField: '_id',
+        as: 'city'
+      }
+    },
+    {$unwind: '$city'},
+  ],
+  CityLocation: [
+    {
+      $lookup: {
+        from: 'location',
+        localField: 'city.location',
+        foreignField: '_id',
+        as: 'cityLocation'
+      }
+    },
+    {$unwind: '$cityLocation'},
+  ],
+  Location: [
+    {
+      $lookup: {
+        from: 'location',
+        localField: 'locationId',
+        foreignField: '_id',
+        as: 'location'
+      }
+    },
+    {$unwind: '$location'},
+  ],
+  Comment: [
+    {
+      $lookup: {
+        from: 'comment',
+        let: {offerId: '$_id'},
+        pipeline: [
+          {$match: {$expr: {$eq: ['$$offerId', '$offerId']}}},
+          {$project: {
+            _id: 1,
+            rating: 1
+          }}
+        ],
+        as: 'comments'
+      }
+    }
+  ],
+  Offer: [
+    {$project: {
+      title: '$title',
+      date: '$date',
+      city: {
+        name: '$city.name',
+        location: {
+          latitude: '$cityLocation.latitude',
+          longitude: '$cityLocation.longitude'
+        }
+      },
+      previewImage: '$previewImage',
+      isPremium: '$isPremium',
+      isFavorite: '$isFavorite',
+      rating: {$ifNull: [{$round: [{$avg: '$comments.rating'}, 1]}, 0]},
+      type: '$type',
+      price: '$price',
+      commentsCount: {$size: '$comments'}
+    }}
+  ],
+  OfferExtended: [
+    {$project: {
+      title: '$title',
+      description: '$description',
+      date: '$date',
+      city: {
+        name: '$city.name',
+        location: {
+          latitude: '$cityLocation.latitude',
+          longitude: '$cityLocation.longitude'
+        }
+      },
+      previewImage: '$previewImage',
+      images: '$images',
+      isPremium: '$isPremium',
+      isFavorite: '$isFavorite',
+      rating: {$ifNull: [{$round: [{$avg: '$comments.rating'}, 1]}, 0]},
+      type: '$type',
+      bedrooms: '$bedrooms',
+      guests: '$guests',
+      price: '$price',
+      goods: '$goods',
+      user: {
+        name: '$user.name',
+        email: '$user.email',
+        avatar: '$user.avatar',
+        userType: '$user.userType',
+      },
+      commentsCount: {$size: '$comments'},
+      location: {
+        latitude: '$location.latitude',
+        longitude: '$location.longitude',
+      },
+    }}
+  ]
 };

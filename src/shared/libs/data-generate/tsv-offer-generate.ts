@@ -39,7 +39,7 @@ export class TsvOfferGenerate implements DataGenerate {
     const rating = getRandomNumber(Rating.MIN, Rating.MAX, 1);
     const type = getRandomElementFromArray(this.mockData.types);
     const bedrooms = getRandomNumber(Bedroom.MIN, Bedroom.MAX);
-    const maxGuests = getRandomNumber(Guest.MIN, Guest.MAX);
+    const guests = getRandomNumber(Guest.MIN, Guest.MAX);
     const price = getRandomNumber(Price.MIN, Price.MAX);
     const goods = getRandomElementsFromArray(this.mockData.goods).join(Separator.Enumeration);
     const userName = getRandomElementFromArray(this.mockData.names);
@@ -65,7 +65,7 @@ export class TsvOfferGenerate implements DataGenerate {
       rating,
       type,
       bedrooms,
-      maxGuests,
+      guests,
       price,
       goods,
       userName,

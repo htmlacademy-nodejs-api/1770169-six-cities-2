@@ -568,6 +568,7 @@ components:
           example: true
         rating:
           type: number
+          readOnly: true
           example: 4
         type:
           type: string
@@ -591,6 +592,8 @@ components:
             description:
               type: string
               example: Peaceful studio in the most wanted area in town.
+            city:
+              $ref: "#/components/schemas/CityName"
             images:
               type: array
               items:
@@ -599,7 +602,7 @@ components:
             bedrooms:
               type: number
               example: 2
-            maxGuests:
+            guests:
               type: number
               example: 4
             goods:
@@ -621,6 +624,8 @@ components:
         - $ref: "#/components/schemas/Offer"
         - type: object
           properties:
+            city:
+              $ref: "#/components/schemas/City"
             user:
               $ref: "#/components/schemas/User"
     MinimumComment:

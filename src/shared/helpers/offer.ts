@@ -17,7 +17,7 @@ export const createOffer = (offerData: string): Offer => {
     rating,
     type,
     bedrooms,
-    maxGuests,
+    guests,
     price,
     goods,
     userName,
@@ -47,7 +47,7 @@ export const createOffer = (offerData: string): Offer => {
     rating: Number.parseFloat(rating),
     type: type as OfferType,
     bedrooms: Number.parseInt(bedrooms, RADIX),
-    maxGuests: Number.parseInt(maxGuests, RADIX),
+    guests: Number.parseInt(guests, RADIX),
     price: Number.parseInt(price, RADIX),
     goods: goods.split(Separator.Enumeration).map((good) => good) as OfferFacilities[],
     user: {

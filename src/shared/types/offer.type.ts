@@ -19,7 +19,7 @@ export type Offer = {
   rating: number;
   type: OfferType;
   bedrooms: number;
-  maxGuests: number;
+  guests: number;
   price: number;
   goods: OfferFacilities[];
   user: User;

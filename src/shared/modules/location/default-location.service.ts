@@ -22,4 +22,13 @@ export class DefaultLocationService implements LocationService {
 
     return result;
   }
+
+  public async findOrCreate(dto: CreateLocationDto): Promise<DocumentType<LocationEntity>> {
+    const existedLocation = await this.locationModel.findOne({$and: [{latitude: dto.latitude}, {longitude: dto.longitude}]});
+
+    if (existedLocation) {
+      return existedLocation;
+    }
+    return this.create(dto);
+  }
 }
