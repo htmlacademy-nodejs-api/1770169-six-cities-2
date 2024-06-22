@@ -45,10 +45,10 @@ export default class ImportCommand implements Command {
     password: string,
     host: string,
     port: string,
-    dbname: string,
+    dbName: string,
     salt: string
   ): Promise<void> {
-    const uri = getMongoURI(userName, password, host, port, dbname);
+    const uri = getMongoURI(userName, password, host, port, dbName);
     this.salt = salt;
     this.databaseClient.connect(uri);
 
