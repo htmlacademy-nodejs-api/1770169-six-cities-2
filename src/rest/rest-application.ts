@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import {Component} from '../shared/constants/index.js';
 import {Config, RestSchema} from '../shared/libs/config/index.js';
 import {Logger} from '../shared/libs/logger/index.js';
-import {createMessage, getMongoURI} from '../shared/helpers/index.js';
+import {getMongoURI} from '../shared/helpers/index.js';
 import {InfoMessage} from './rest.constant.js';
 import {DatabaseClient} from '../shared/libs/database-client/index.js';
 
@@ -29,9 +29,9 @@ export class RestApplication {
   }
 
   public async init() {
-    this.logger.info('Initializing the application.');
-    this.logger.info('Initializing the database...');
+    this.logger.info(InfoMessage.REST_APP_INIT_MESSAGE);
+    this.logger.info(InfoMessage.DATABASE_INIT_MESSAGE);
     await this.initDB();
-    this.logger.info('The database is initialized.');
+    this.logger.info(InfoMessage.DATABASE_INIT_COMPLETED_MESSAGE);
   }
 }
