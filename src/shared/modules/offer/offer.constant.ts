@@ -48,10 +48,10 @@ export const AGGREGATION_OPERATIONS = {
         from: 'user',
         localField: 'userId',
         foreignField: '_id',
-        as: 'user'
+        as: 'userId'
       }
     },
-    {$unwind: '$user'}
+    { $unwind: '$userId' }
   ],
   City: [
     {
@@ -62,18 +62,18 @@ export const AGGREGATION_OPERATIONS = {
         as: 'city'
       }
     },
-    {$unwind: '$city'},
+    { $unwind: '$city' }
   ],
   CityLocation: [
     {
       $lookup: {
         from: 'location',
-        localField: 'city.location',
+        localField: 'city.locationId',
         foreignField: '_id',
         as: 'cityLocation'
       }
     },
-    {$unwind: '$cityLocation'},
+    { $unwind: '$cityLocation' }
   ],
   Location: [
     {
@@ -81,80 +81,40 @@ export const AGGREGATION_OPERATIONS = {
         from: 'location',
         localField: 'locationId',
         foreignField: '_id',
-        as: 'location'
+        as: 'locationId'
       }
     },
-    {$unwind: '$location'},
+    { $unwind: '$locationId' }
   ],
   Comment: [
     {
       $lookup: {
         from: 'comment',
-        let: {offerId: '$_id'},
+        let: { offerId: '$_id' },
         pipeline: [
-          {$match: {$expr: {$eq: ['$$offerId', '$offerId']}}},
-          {$project: {
-            _id: 1,
-            rating: 1
-          }}
+          { $match: { $expr: { $eq: ['$$offerId', '$offerId'] } } },
+          {
+            $project: {
+              _id: 1,
+              rating: 1
+            }
+          }
         ],
         as: 'comments'
       }
     }
   ],
-  Offer: [
-    {$project: {
-      title: '$title',
-      date: '$date',
-      city: {
-        name: '$city.name',
-        location: {
-          latitude: '$cityLocation.latitude',
-          longitude: '$cityLocation.longitude'
-        }
-      },
-      previewImage: '$previewImage',
-      isPremium: '$isPremium',
-      isFavorite: '$isFavorite',
-      rating: {$ifNull: [{$round: [{$avg: '$comments.rating'}, 1]}, 0]},
-      type: '$type',
-      price: '$price',
-      commentsCount: {$size: '$comments'}
-    }}
-  ],
-  OfferExtended: [
-    {$project: {
-      title: '$title',
-      description: '$description',
-      date: '$date',
-      city: {
-        name: '$city.name',
-        location: {
-          latitude: '$cityLocation.latitude',
-          longitude: '$cityLocation.longitude'
-        }
-      },
-      previewImage: '$previewImage',
-      images: '$images',
-      isPremium: '$isPremium',
-      isFavorite: '$isFavorite',
-      rating: {$ifNull: [{$round: [{$avg: '$comments.rating'}, 1]}, 0]},
-      type: '$type',
-      bedrooms: '$bedrooms',
-      guests: '$guests',
-      price: '$price',
-      goods: '$goods',
-      user: {
-        name: '$user.name',
-        email: '$user.email',
-        avatar: '$user.avatar',
-        userType: '$user.userType',
-      },
-      commentsCount: {$size: '$comments'},
-      location: {
-        latitude: '$location.latitude',
-        longitude: '$location.longitude',
-      },
-    }}
+  AddFields: [
+    { $addFields: { cityId: '$city' } },
+    {
+      $addFields: {
+        'cityId.locationId': '$cityLocation',
+        rating: { $ifNull: [{ $round: [{ $avg: '$comments.rating' }, 1] }, 0] },
+        commentsCount: { $size: '$comments' },
+      }
+    },
+    { $unset: 'comments' },
+    { $unset: 'cityLocation' },
+    { $unset: 'city' },
   ]
 };

@@ -48,7 +48,7 @@ export class DefaultOfferService implements OfferService {
         ...AGGREGATION_OPERATIONS.City,
         ...AGGREGATION_OPERATIONS.CityLocation,
         ...AGGREGATION_OPERATIONS.Comment,
-        ...AGGREGATION_OPERATIONS.Offer,
+        ...AGGREGATION_OPERATIONS.AddFields,
         {$limit: count},
         {$sort: {createdAt: Sort.DOWN}}
       ]);
@@ -59,11 +59,11 @@ export class DefaultOfferService implements OfferService {
       .aggregate([
         {$match: {'_id': new mongoose.Types.ObjectId(offerId)}},
         ...AGGREGATION_OPERATIONS.City,
+        ...AGGREGATION_OPERATIONS.CityLocation,
         ...AGGREGATION_OPERATIONS.User,
         ...AGGREGATION_OPERATIONS.Location,
-        ...AGGREGATION_OPERATIONS.CityLocation,
         ...AGGREGATION_OPERATIONS.Comment,
-        ...AGGREGATION_OPERATIONS.OfferExtended
+        ...AGGREGATION_OPERATIONS.AddFields
       ]);
 
     return result.length ? result[0] : null;
@@ -75,7 +75,7 @@ export class DefaultOfferService implements OfferService {
         ...AGGREGATION_OPERATIONS.City,
         ...AGGREGATION_OPERATIONS.CityLocation,
         ...AGGREGATION_OPERATIONS.Comment,
-        ...AGGREGATION_OPERATIONS.Offer,
+        ...AGGREGATION_OPERATIONS.AddFields,
         {$match: {$and: [{isPremium: true}, {'city.name': cityName}]}},
         {$limit: MaxView.PremiumOffer},
         {$sort: {createdAt: Sort.DOWN}}
@@ -88,7 +88,7 @@ export class DefaultOfferService implements OfferService {
         ...AGGREGATION_OPERATIONS.City,
         ...AGGREGATION_OPERATIONS.CityLocation,
         ...AGGREGATION_OPERATIONS.Comment,
-        ...AGGREGATION_OPERATIONS.Offer,
+        ...AGGREGATION_OPERATIONS.AddFields,
         {$match: {isPremium: true}}
       ]);
   }

@@ -25,6 +25,8 @@ export class DefaultCityService implements CityService {
   }
 
   public async findByCityName(cityName: string): Promise<DocumentType<CityEntity> | null> {
-    return await this.cityModel.findOne({name: cityName});
+    return await this.cityModel
+      .findOne({name: cityName})
+      .exec();
   }
 }

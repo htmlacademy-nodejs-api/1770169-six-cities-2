@@ -1,6 +1,6 @@
 import {inject, injectable} from 'inversify';
 
-import {DocumentType, mongoose, types} from '@typegoose/typegoose';
+import {DocumentType, types} from '@typegoose/typegoose';
 
 import {Component, Sort} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
@@ -26,31 +26,11 @@ export class DefaultCommentService implements CommentService {
 
   async find(offerId: string): Promise<DocumentType<CommentEntity>[]> {
     return await this.commentModel
-      .aggregate([
-        {$match: {'offerId': new mongoose.Types.ObjectId(offerId)}},
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'user'
-          }
-        },
-        {$unwind: '$user'},
-        {$project: {
-          comment: '$comment',
-          date: '$date',
-          rating: '$rating',
-          user: {
-            name: '$user.name',
-            email: '$user.email',
-            avatar: '$user.avatar',
-            userType: '$user.userType',
-          },
-        }},
-        {$limit: MAX_COMMENT_VIEW},
-        {$sort: {createdAt: Sort.DOWN}}
-      ]);
+      .find({offerId})
+      .populate('userId')
+      .limit(MAX_COMMENT_VIEW)
+      .sort({createdAt: Sort.DOWN})
+      .exec();
   }
 
   public async deleteById(offerId: string): Promise<number> {

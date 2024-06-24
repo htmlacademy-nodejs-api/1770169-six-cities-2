@@ -50,6 +50,7 @@ export default class ImportCommand implements Command {
   ): Promise<void> {
     const uri = getMongoURI(userName, password, host, port, dbName);
     this.salt = salt;
+
     this.databaseClient.connect(uri);
 
     if (!filename) {
@@ -85,7 +86,7 @@ export default class ImportCommand implements Command {
     const cityLocation = await this.locationService.create(offer.city.location);
     const city = await this.cityService.create({
       name: offer.city.name,
-      location: cityLocation
+      locationId: cityLocation.id
     });
     const location = await this.locationService.create(offer.location);
     await this.offerService.create({

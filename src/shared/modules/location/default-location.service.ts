@@ -24,7 +24,9 @@ export class DefaultLocationService implements LocationService {
   }
 
   public async findOrCreate(dto: CreateLocationDto): Promise<DocumentType<LocationEntity>> {
-    const existedLocation = await this.locationModel.findOne({$and: [{latitude: dto.latitude}, {longitude: dto.longitude}]});
+    const existedLocation = await this.locationModel
+      .findOne({$and: [{latitude: dto.latitude}, {longitude: dto.longitude}]})
+      .exec();
 
     if (existedLocation) {
       return existedLocation;
