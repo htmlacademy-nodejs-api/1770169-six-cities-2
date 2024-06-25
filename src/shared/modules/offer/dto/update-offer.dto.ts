@@ -1,10 +1,10 @@
-import {OfferFacilities, OfferType} from '../../../types/index.js';
+import {Location, OfferFacilities, OfferType} from '../../../types/index.js';
 
 export class UpdateOfferDto {
   public title?: string;
   public description?: string;
   public date?: Date;
-  public cityId?: string;
+  public city?: string;
   public previewImage?: string;
   public images?: string[];
   public isPremium?: boolean;
@@ -14,5 +14,5 @@ export class UpdateOfferDto {
   public guests?: number;
   public price?: number;
   public goods?: OfferFacilities[];
-  public locationId?: string;
+  public location?: string | Location;
 }

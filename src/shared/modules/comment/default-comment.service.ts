@@ -27,7 +27,7 @@ export class DefaultCommentService implements CommentService {
   async find(offerId: string): Promise<DocumentType<CommentEntity>[]> {
     return await this.commentModel
       .find({offerId})
-      .populate('userId')
+      .populate('user')
       .limit(MAX_COMMENT_VIEW)
       .sort({createdAt: Sort.DOWN})
       .exec();

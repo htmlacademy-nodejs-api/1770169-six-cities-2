@@ -86,14 +86,14 @@ export default class ImportCommand implements Command {
     const cityLocation = await this.locationService.create(offer.city.location);
     const city = await this.cityService.create({
       name: offer.city.name,
-      locationId: cityLocation.id
+      location: cityLocation.id
     });
     const location = await this.locationService.create(offer.location);
     await this.offerService.create({
       ...offer,
-      cityId: city.id,
-      userId: user.id,
-      locationId: location.id
+      city: city.id,
+      user: user.id,
+      location: location.id
     });
   }
 }
