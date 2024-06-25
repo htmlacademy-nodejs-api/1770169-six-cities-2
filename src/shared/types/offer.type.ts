@@ -16,10 +16,9 @@ export type Offer = {
   images: string[];
   isPremium: boolean;
   isFavorite: boolean;
-  rating: number;
   type: OfferType;
   bedrooms: number;
-  maxGuests: number;
+  guests: number;
   price: number;
   goods: OfferFacilities[];
   user: User;

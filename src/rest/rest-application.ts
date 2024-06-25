@@ -4,17 +4,34 @@ import 'reflect-metadata';
 import {Component} from '../shared/constants/index.js';
 import {Config, RestSchema} from '../shared/libs/config/index.js';
 import {Logger} from '../shared/libs/logger/index.js';
-import {createMessage} from '../shared/helpers/index.js';
+import {getMongoURI} from '../shared/helpers/index.js';
 import {InfoMessage} from './rest.constant.js';
+import {DatabaseClient} from '../shared/libs/database-client/index.js';
 
 @injectable()
 export class RestApplication {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
-    @inject(Component.Config) private readonly config: Config<RestSchema>
+    @inject(Component.Config) private readonly config: Config<RestSchema>,
+    @inject(Component.Database) private readonly databaseClient: DatabaseClient
   ) {}
 
-  public init() {
-    this.logger.info(createMessage(InfoMessage.REST_APP_INIT_MESSAGE, [this.config.get('PORT')]));
+  private async initDB() {
+    const uri = getMongoURI(
+      this.config.get('DB_USER_NAME'),
+      this.config.get('DB_USER_PASSWORD'),
+      this.config.get('DB_HOST'),
+      this.config.get('DB_PORT'),
+      this.config.get('DB_NAME')
+    );
+
+    return this.databaseClient.connect(uri);
+  }
+
+  public async init() {
+    this.logger.info(InfoMessage.REST_APP_INIT_MESSAGE);
+    this.logger.info(InfoMessage.DATABASE_INIT_MESSAGE);
+    await this.initDB();
+    this.logger.info(InfoMessage.DATABASE_INIT_COMPLETED_MESSAGE);
   }
 }

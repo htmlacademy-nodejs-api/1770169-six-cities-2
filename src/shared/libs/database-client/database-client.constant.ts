@@ -4,7 +4,7 @@ export enum Retry {
 }
 
 export const InfoMessage = {
-  TRYING_CONNECT_MESSAGE: 'Trying to connect to database…',
+  TRYING_CONNECT_MESSAGE: 'Trying to connect to database...',
   CONNECT_MESSAGE: 'Database connection established.',
   DISCONNECT_MESSAGE: 'Database connection closed.'
 };

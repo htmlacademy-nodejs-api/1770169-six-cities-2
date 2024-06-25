@@ -15,8 +15,7 @@ import {
   Guest,
   MAX_IMAGE_VIEW,
   NumericValue,
-  Price,
-  Rating
+  Price
 } from './data-generate.constant.js';
 import {UserType} from '../../types/user-type.enum.js';
 
@@ -36,10 +35,9 @@ export class TsvOfferGenerate implements DataGenerate {
     const images = getRandomElementsFromArray(this.mockData.images, MAX_IMAGE_VIEW).join(Separator.Enumeration);
     const isPremium = !!getRandomNumber(NumericValue.False, NumericValue.True);
     const isFavorite = !!getRandomNumber(NumericValue.False, NumericValue.True);
-    const rating = getRandomNumber(Rating.MIN, Rating.MAX, 1);
     const type = getRandomElementFromArray(this.mockData.types);
     const bedrooms = getRandomNumber(Bedroom.MIN, Bedroom.MAX);
-    const maxGuests = getRandomNumber(Guest.MIN, Guest.MAX);
+    const guests = getRandomNumber(Guest.MIN, Guest.MAX);
     const price = getRandomNumber(Price.MIN, Price.MAX);
     const goods = getRandomElementsFromArray(this.mockData.goods).join(Separator.Enumeration);
     const userName = getRandomElementFromArray(this.mockData.names);
@@ -62,10 +60,9 @@ export class TsvOfferGenerate implements DataGenerate {
       images,
       isPremium,
       isFavorite,
-      rating,
       type,
       bedrooms,
-      maxGuests,
+      guests,
       price,
       goods,
       userName,

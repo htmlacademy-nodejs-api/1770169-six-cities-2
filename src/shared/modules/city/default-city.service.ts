@@ -23,4 +23,10 @@ export class DefaultCityService implements CityService {
 
     return result;
   }
+
+  public async findByCityName(cityName: string): Promise<DocumentType<CityEntity> | null> {
+    return await this.cityModel
+      .findOne({name: cityName})
+      .exec();
+  }
 }

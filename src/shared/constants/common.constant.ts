@@ -12,3 +12,8 @@ export enum Separator {
   Enumeration = ';',
   Empty = ''
 }
+
+export enum Sort {
+  UP = 1,
+  DOWN = -1
+}

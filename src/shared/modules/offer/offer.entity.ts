@@ -8,7 +8,6 @@ import {
   Description,
   Guest,
   Price,
-  Rating,
   Title
 } from './offer.constant.js';
 import {CityEntity} from '../city/index.js';
@@ -36,7 +35,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public date: Date;
 
   @prop({required: true, ref: CityEntity})
-  public city: Ref<CityEntity>;
+  public cityId: Ref<CityEntity>;
 
   @prop({required: true})
   public previewImage: string;
@@ -50,9 +49,6 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public isFavorite: boolean;
 
-  @prop({required: true, min: Rating.Min, max: Rating.Max})
-  public rating: number;
-
   @prop({required: true, type: () => String, enum: Housing})
   public type: OfferType;
 
@@ -60,7 +56,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public bedrooms: number;
 
   @prop({required: true, min: Guest.Min, max: Guest.Max})
-  public maxGuests: number;
+  public guests: number;
 
   @prop({required: true, min: Price.Min, max: Price.Max})
   public price: number;
@@ -69,13 +65,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public goods: OfferFacilities[];
 
   @prop({required: true, ref: UserEntity})
-  public user: Ref<UserEntity>;
-
-  @prop({required: true})
-  public comments: number;
+  public userId: Ref<UserEntity>;
 
   @prop({required: true, ref: LocationEntity})
-  public location: Ref<LocationEntity>;
+  public locationId: Ref<LocationEntity>;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

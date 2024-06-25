@@ -30,6 +30,10 @@ export const getRandomDate = (fromDate: string, toDate: string): string => {
 
 export const getErrorMessage = (error: unknown): string => error instanceof Error ? error.message : '';
 
-export const createMessage = <T>(message: string, expressions: T[] = []): string => (
-  expressions.reduce((accumulator: string, currentValue: T) => accumulator.replace(/%([^%]*)%/, String(currentValue)), message)
-);
+export const createMessage = <T>(message: string, expressions: T[] = []): string => {
+  if (!expressions.length) {
+    return message.replace(/%([^%]*)%/, '').trim();
+  }
+
+  return expressions.reduce((accumulator: string, currentValue: T) => accumulator.replace(/%([^%]*)%/, String(currentValue)), message);
+};
