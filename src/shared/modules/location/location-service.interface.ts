@@ -6,4 +6,5 @@ import {LocationEntity} from './location.entity.js';
 export interface LocationService {
   create(dto: CreateLocationDto): Promise<DocumentType<LocationEntity>>;
   findOrCreate(dto: CreateLocationDto): Promise<DocumentType<LocationEntity>>;
+  updateById(cityId: string, dto: CreateLocationDto): Promise<DocumentType<LocationEntity> | null>
 }

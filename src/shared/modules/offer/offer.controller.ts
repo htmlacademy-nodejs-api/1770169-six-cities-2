@@ -1,6 +1,6 @@
 import {NextFunction, Response} from 'express';
 
-import {inject} from 'inversify';
+import {inject, injectable} from 'inversify';
 
 import {BaseController, HttpMethod} from '../../libs/rest/index.js';
 import {Component} from '../../constants/index.js';
@@ -14,7 +14,7 @@ import {LocationService} from '../location/index.js';
 import {Location} from '../../types/index.js';
 import {OfferExtendedRdo} from './rdo/offer-extended-rdo.js';
 
-
+@injectable()
 export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
@@ -46,7 +46,7 @@ export class OfferController extends BaseController {
     if (city === null) {
       throw new Error('');
     }
-    const offer = await this.offerService.create({...body, city: city.id, user: '', location: location});
+    const offer = await this.offerService.create({...body, city: city.id, user: '667d452a24dde3e029b27198', location: location});
     this.created(res, fillDto(OfferRdo, offer));
   }
 
@@ -62,8 +62,10 @@ export class OfferController extends BaseController {
     }
 
     if (body.location) {
-      const location = await this.locationService.findOrCreate(body.location as Location);
-      update.location = location.id;
+      const foundOffer = await this.offerService.findById(params.offerId);
+      const location = await this.locationService.updateById(foundOffer?.location.id, body.location as Location);
+      console.log(foundOffer);
+      update.location = location?.id;
     }
     const offer = await this.offerService.updateById(params.offerId, update);
     this.ok(res, fillDto(OfferRdo, offer));

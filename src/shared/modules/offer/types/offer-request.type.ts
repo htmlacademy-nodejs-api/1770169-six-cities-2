@@ -7,6 +7,8 @@ import {UpdateOfferDto} from '../dto/update-offer.dto.js';
 
 export type RequestQuery = {
   count: string;
+  city: string;
+  status: string;
 } | Query;
 
 export type RequestParams = {
@@ -15,4 +17,4 @@ export type RequestParams = {
 
 export type OfferRequest = Request<RequestParams, ResponseBody, CreateOfferDto, RequestQuery>;
 
-export type UpdateOfferRequest = Request<RequestParams, ResponseBody, UpdateOfferDto>;
+export type UpdateOfferRequest = Request<RequestParams, ResponseBody, UpdateOfferDto, RequestQuery>;

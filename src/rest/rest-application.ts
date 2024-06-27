@@ -21,7 +21,10 @@ export class RestApplication {
     @inject(Component.Database) private readonly databaseClient: DatabaseClient,
     @inject(Component.AppExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
     @inject(Component.OfferController) private readonly offerController: Controller,
-    @inject(Component.CommentController) private readonly commentController: Controller
+    @inject(Component.FavoriteOfferController) private readonly favoriteOfferController: Controller,
+    @inject(Component.PremiumOfferController) private readonly premiumOfferController: Controller,
+    @inject(Component.CommentController) private readonly commentController: Controller,
+    @inject(Component.UserController) private readonly userController: Controller
   ) {
     this.server = express();
   }
@@ -44,8 +47,11 @@ export class RestApplication {
   }
 
   private async initControllers() {
-    this.server.use('six-cities/comments', this.commentController.router);
-    this.server.use('six-cities/offers', this.offerController.router);
+    this.server.use('/six-cities/comments', this.commentController.router);
+    this.server.use('/six-cities/offers', this.offerController.router);
+    this.server.use('/six-cities/favorite', this.favoriteOfferController.router);
+    this.server.use('/six-cities/premium', this.premiumOfferController.router);
+    this.server.use('/six-cities/user', this.userController.router);
   }
 
   private async initMiddlewares() {
