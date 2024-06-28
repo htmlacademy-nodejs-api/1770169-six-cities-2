@@ -9,6 +9,7 @@ import {OfferService} from './offer-service.interface.js';
 import {OfferRequest} from './types/offer-request.type.js';
 import {fillDto} from '../../helpers/index.js';
 import {OfferRdo} from './rdo/offer-rdo.js';
+import {InfoMessage} from './offer.constant.js';
 
 @injectable()
 export class PremiumOfferController extends BaseController {
@@ -17,6 +18,8 @@ export class PremiumOfferController extends BaseController {
     @inject(Component.OfferService) private readonly offerService: OfferService
   ) {
     super(logger);
+
+    this.logger.info(InfoMessage.REGISTER_PREMIUM_OFFER_ROUTES_MESSAGE);
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.findPremiumOffers});
   }
 

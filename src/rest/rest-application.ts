@@ -69,20 +69,20 @@ export class RestApplication {
     await this.initDB();
     this.logger.info(InfoMessage.DATABASE_INIT_COMPLETED_MESSAGE);
 
-    this.logger.info('Init middlewares');
+    this.logger.info(InfoMessage.MIDDLEWARES_INIT_MESSAGE);
     await this.initMiddlewares();
-    this.logger.info('Middlewares initialization completed');
+    this.logger.info(InfoMessage.MIDDLEWARES_INIT_COMPLETED_MESSAGE);
 
-    this.logger.info('Init exception filters');
+    this.logger.info(InfoMessage.EXCEPTIONS_INIT_MESSAGE);
     await this.initExceptionFilters();
-    this.logger.info('Exception initialization completed');
+    this.logger.info(InfoMessage.EXCEPTIONS_INIT_COMPLETED_MESSAGE);
 
-    this.logger.info('Init controllers');
+    this.logger.info(InfoMessage.CONTROLLERS_INIT_MESSAGE);
     await this.initControllers();
-    this.logger.info('Controller initialization completed');
+    this.logger.info(InfoMessage.CONTROLLERS_INIT_COMPLETED_MESSAGE);
 
-    this.logger.info('Init server');
+    this.logger.info(InfoMessage.SERVER_INIT_MESSAGE);
     await this.initServer();
-    this.logger.info('Server started on port: %port%');
+    this.logger.info(InfoMessage.SERVER_INIT_COMPLETED_MESSAGE);
   }
 }

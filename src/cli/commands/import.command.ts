@@ -40,8 +40,8 @@ export default class ImportCommand implements Command {
   }
 
   public async execute(
+    options: string[],
     filename: string,
-    option: string = ImportOption.CityData,
     userName: string,
     password: string,
     host: string,
@@ -59,7 +59,7 @@ export default class ImportCommand implements Command {
 
     const fileReader = new TsvFileReader(filename.trim());
 
-    fileReader.on('line', (line, resolve) => this.onImportedLine(line, resolve, option));
+    fileReader.on('line', (line, resolve) => this.onImportedLine(line, resolve, options));
     fileReader.on('end', this.onCompleteImport);
 
     try {
@@ -70,17 +70,19 @@ export default class ImportCommand implements Command {
     }
   }
 
-  private onImportedLine = async(line: string, resolve: () => void, option: string) => {
-    switch (option) {
-      case ImportOption.CityData:
-        await this.saveCity(createCity(line));
-        resolve();
-        break;
-      case ImportOption.MockData:
-        await this.saveOffer(createOffer(line));
-        resolve();
-        break;
-    }
+  private onImportedLine = (line: string, resolve: () => void, options: string[]) => {
+    options.forEach(async (option) => {
+      switch (option) {
+        case ImportOption.CityData:
+          await this.saveCity(createCity(line));
+          resolve();
+          break;
+        case ImportOption.MockData:
+          await this.saveOffer(createOffer(line));
+          resolve();
+          break;
+      }
+    });
   };
 
   private onCompleteImport = (count: number) => {

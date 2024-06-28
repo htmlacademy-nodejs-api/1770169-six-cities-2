@@ -9,6 +9,7 @@ import {CommentService} from './comment-service.interface.js';
 import {fillDto} from '../../helpers/index.js';
 import {CommentRdo} from './rdo/comment.rdo.js';
 import {CommentRequest} from './types/comment-request.type.js';
+import {InfoMessage} from './comment.constant.js';
 
 @injectable()
 export class CommentController extends BaseController {
@@ -18,7 +19,7 @@ export class CommentController extends BaseController {
   ) {
     super(logger);
 
-    this.logger.info('Register routes for CommentController...');
+    this.logger.info(InfoMessage.REGISTER_ROUTES_MESSAGE);
     this.addRoute({path: '/:offerId', method: HttpMethod.Get, handler: this.findComments});
     this.addRoute({path: '/:offerId', method: HttpMethod.Post, handler: this.createComments});
   }

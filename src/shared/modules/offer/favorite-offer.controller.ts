@@ -9,6 +9,7 @@ import {OfferService} from './offer-service.interface.js';
 import {fillDto} from '../../helpers/index.js';
 import {OfferRdo} from './rdo/offer-rdo.js';
 import {UpdateOfferRequest} from './types/offer-request.type.js';
+import {InfoMessage} from './offer.constant.js';
 
 @injectable()
 export class FavoriteOfferController extends BaseController {
@@ -17,6 +18,8 @@ export class FavoriteOfferController extends BaseController {
     @inject(Component.OfferService) private readonly offerService: OfferService
   ) {
     super(logger);
+
+    this.logger.info(InfoMessage.REGISTER_FAVORITE_OFFER_ROUTES_MESSAGE);
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.findFavoriteOffers});
     this.addRoute({path: '/:offerId', method: HttpMethod.Post, handler: this.addOrRemoveFavoriteOffers});
   }

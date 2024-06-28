@@ -41,3 +41,5 @@ export const createMessage = <T>(message: string, expressions: T[] = []): string
 };
 
 export const fillDto = <T, K>(someDto: ClassConstructor<T>, plainObject: K) => plainToInstance(someDto, plainObject, {excludeExtraneousValues: true});
+
+export const createErrorObject = (message: string) => ({error: message});
