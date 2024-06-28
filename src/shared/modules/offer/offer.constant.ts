@@ -1,4 +1,5 @@
 export const COLLECTION_NAME = 'offer';
+export const DETAIL = 'OfferController';
 
 export enum MaxView {
   Image = 6,
@@ -39,6 +40,13 @@ export enum Price {
 export const InfoMessage = {
   CREATE_OFFER_MESSAGE: 'New \'%offerName%\' offer has been successfully created.',
   UPDATE_OFFER_MESSAGE: 'The \'%offerName%\' offer has been successfully updated.',
+  REGISTER_OFFER_ROUTES_MESSAGE: 'Register routes for OfferController.',
+  REGISTER_FAVORITE_OFFER_ROUTES_MESSAGE: 'Register routes for FavoriteOfferController.',
+  REGISTER_PREMIUM_OFFER_ROUTES_MESSAGE: 'Register routes for PremiumOfferController.'
+};
+
+export const ErrorMessage = {
+  CITY_NOT_FOUND_MESSAGE: 'This city: \'%city%\' was not found in the list of available cities.',
 };
 
 export const AGGREGATION_OPERATIONS = {
@@ -46,18 +54,18 @@ export const AGGREGATION_OPERATIONS = {
     {
       $lookup: {
         from: 'user',
-        localField: 'userId',
+        localField: 'user',
         foreignField: '_id',
-        as: 'userId'
+        as: 'user'
       }
     },
-    { $unwind: '$userId' }
+    { $unwind: '$user' }
   ],
   City: [
     {
       $lookup: {
         from: 'city',
-        localField: 'cityId',
+        localField: 'city',
         foreignField: '_id',
         as: 'city'
       }
@@ -68,7 +76,7 @@ export const AGGREGATION_OPERATIONS = {
     {
       $lookup: {
         from: 'location',
-        localField: 'city.locationId',
+        localField: 'city.location',
         foreignField: '_id',
         as: 'cityLocation'
       }
@@ -79,12 +87,12 @@ export const AGGREGATION_OPERATIONS = {
     {
       $lookup: {
         from: 'location',
-        localField: 'locationId',
+        localField: 'location',
         foreignField: '_id',
-        as: 'locationId'
+        as: 'location'
       }
     },
-    { $unwind: '$locationId' }
+    { $unwind: '$location' }
   ],
   Comment: [
     {
@@ -92,7 +100,7 @@ export const AGGREGATION_OPERATIONS = {
         from: 'comment',
         let: { offerId: '$_id' },
         pipeline: [
-          { $match: { $expr: { $eq: ['$$offerId', '$offerId'] } } },
+          { $match: { $expr: { $eq: ['$$offerId', '$offer'] } } },
           {
             $project: {
               _id: 1,
@@ -105,16 +113,15 @@ export const AGGREGATION_OPERATIONS = {
     }
   ],
   AddFields: [
-    { $addFields: { cityId: '$city' } },
+    { $addFields: { city: '$city' } },
     {
       $addFields: {
-        'cityId.locationId': '$cityLocation',
+        'city.location': '$cityLocation',
         rating: { $ifNull: [{ $round: [{ $avg: '$comments.rating' }, 1] }, 0] },
         commentsCount: { $size: '$comments' },
       }
     },
     { $unset: 'comments' },
-    { $unset: 'cityLocation' },
-    { $unset: 'city' },
+    { $unset: 'cityLocation' }
   ]
 };

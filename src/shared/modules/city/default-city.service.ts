@@ -29,4 +29,14 @@ export class DefaultCityService implements CityService {
       .findOne({name: cityName})
       .exec();
   }
+
+  public async findOrCreate(dto: CreateCityDto): Promise<DocumentType<CityEntity>> {
+    const existedCity = await this.findByCityName(dto.name);
+
+    if (existedCity) {
+      return existedCity;
+    }
+
+    return this.create(dto);
+  }
 }

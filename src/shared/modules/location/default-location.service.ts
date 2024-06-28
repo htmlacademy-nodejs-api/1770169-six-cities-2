@@ -33,4 +33,10 @@ export class DefaultLocationService implements LocationService {
     }
     return this.create(dto);
   }
+
+  public async updateById(cityId: string, dto: CreateLocationDto): Promise<DocumentType<LocationEntity> | null> {
+    return await this.locationModel
+      .findByIdAndUpdate(cityId, dto, {new: true})
+      .exec();
+  }
 }

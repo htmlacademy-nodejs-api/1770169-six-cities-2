@@ -35,7 +35,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public date: Date;
 
   @prop({required: true, ref: CityEntity})
-  public cityId: Ref<CityEntity>;
+  public city: Ref<CityEntity>;
 
   @prop({required: true})
   public previewImage: string;
@@ -65,10 +65,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public goods: OfferFacilities[];
 
   @prop({required: true, ref: UserEntity})
-  public userId: Ref<UserEntity>;
+  public user: Ref<UserEntity>;
 
   @prop({required: true, ref: LocationEntity})
-  public locationId: Ref<LocationEntity>;
+  public location: Ref<LocationEntity>;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

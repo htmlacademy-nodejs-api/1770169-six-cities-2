@@ -1,14 +1,14 @@
 import chalk from 'chalk';
 
 import {TsvFileReader} from '../../shared/libs/file-reader/index.js';
-import {CommandName, ErrorMessage, InfoMessage} from './command.constant.js';
+import {CommandName, ErrorMessage, ImportOption, InfoMessage} from './command.constant.js';
 import {Command} from './command.interface.js';
-import {createMessage, createOffer, getErrorMessage} from '../../shared/helpers/index.js';
+import {createCity, createMessage, createOffer, getErrorMessage} from '../../shared/helpers/index.js';
 import {DefaultUserService, UserModel, UserService} from '../../shared/modules/user/index.js';
 import {DefaultOfferService, OfferModel, OfferService} from '../../shared/modules/offer/index.js';
 import {DatabaseClient, MongoDatabaseClient} from '../../shared/libs/database-client/index.js';
 import {Logger, PinoLogger} from '../../shared/libs/logger/index.js';
-import {Offer} from '../../shared/types/index.js';
+import {City, Offer} from '../../shared/types/index.js';
 import {getMongoURI} from '../../shared/helpers/index.js';
 import {DefaultLocationService, LocationModel, LocationService} from '../../shared/modules/location/index.js';
 import {CityModel, CityService, DefaultCityService} from '../../shared/modules/city/index.js';
@@ -40,6 +40,7 @@ export default class ImportCommand implements Command {
   }
 
   public async execute(
+    options: string[],
     filename: string,
     userName: string,
     password: string,
@@ -50,7 +51,6 @@ export default class ImportCommand implements Command {
   ): Promise<void> {
     const uri = getMongoURI(userName, password, host, port, dbName);
     this.salt = salt;
-
     this.databaseClient.connect(uri);
 
     if (!filename) {
@@ -59,7 +59,7 @@ export default class ImportCommand implements Command {
 
     const fileReader = new TsvFileReader(filename.trim());
 
-    fileReader.on('line', this.onImportedLine);
+    fileReader.on('line', (line, resolve) => this.onImportedLine(line, resolve, options));
     fileReader.on('end', this.onCompleteImport);
 
     try {
@@ -70,10 +70,19 @@ export default class ImportCommand implements Command {
     }
   }
 
-  private onImportedLine = async(line: string, resolve: () => void) => {
-    const offer = createOffer(line);
-    await this.saveOffer(offer);
-    resolve();
+  private onImportedLine = (line: string, resolve: () => void, options: string[]) => {
+    options.forEach(async (option) => {
+      switch (option) {
+        case ImportOption.CityData:
+          await this.saveCity(createCity(line));
+          resolve();
+          break;
+        case ImportOption.MockData:
+          await this.saveOffer(createOffer(line));
+          resolve();
+          break;
+      }
+    });
   };
 
   private onCompleteImport = (count: number) => {
@@ -84,16 +93,21 @@ export default class ImportCommand implements Command {
   private async saveOffer(offer: Offer) {
     const user = await this.userService.create(offer.user, this.salt);
     const cityLocation = await this.locationService.create(offer.city.location);
-    const city = await this.cityService.create({
+    const city = await this.cityService.findOrCreate({
       name: offer.city.name,
-      locationId: cityLocation.id
+      location: cityLocation.id
     });
     const location = await this.locationService.create(offer.location);
     await this.offerService.create({
       ...offer,
-      cityId: city.id,
-      userId: user.id,
-      locationId: location.id
+      city: city.id,
+      user: user.id,
+      location: location.id
     });
+  }
+
+  private async saveCity(city: City) {
+    const location = await this.locationService.findOrCreate(city.location);
+    await this.cityService.create({...city, location: location.id});
   }
 }

@@ -21,7 +21,7 @@ export class CityEntity extends defaultClasses.TimeStamps {
   public name: CityName;
 
   @prop({required: true, ref: LocationEntity})
-  public locationId: Ref<LocationEntity>;
+  public location: Ref<LocationEntity>;
 }
 
 export const CityModel = getModelForClass(CityEntity);

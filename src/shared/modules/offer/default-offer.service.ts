@@ -42,14 +42,16 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async find(count: number = MaxView.Offer): Promise<DocumentType<OfferEntity>[]> {
+  public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
+    const limit = Number.isNaN(count) ? MaxView.Offer : count as number;
+    console.log(limit);
     return await this.offerModel
       .aggregate([
         ...AGGREGATION_OPERATIONS.City,
         ...AGGREGATION_OPERATIONS.CityLocation,
         ...AGGREGATION_OPERATIONS.Comment,
         ...AGGREGATION_OPERATIONS.AddFields,
-        {$limit: count},
+        {$limit: limit},
         {$sort: {createdAt: Sort.DOWN}}
       ]);
   }
@@ -57,7 +59,7 @@ export class DefaultOfferService implements OfferService {
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     const result = await this.offerModel
       .aggregate([
-        {$match: {'_id': new mongoose.Types.ObjectId(offerId)}},
+        {$match: {_id: new mongoose.Types.ObjectId(offerId)}},
         ...AGGREGATION_OPERATIONS.City,
         ...AGGREGATION_OPERATIONS.CityLocation,
         ...AGGREGATION_OPERATIONS.User,
@@ -89,7 +91,13 @@ export class DefaultOfferService implements OfferService {
         ...AGGREGATION_OPERATIONS.CityLocation,
         ...AGGREGATION_OPERATIONS.Comment,
         ...AGGREGATION_OPERATIONS.AddFields,
-        {$match: {isPremium: true}}
+        {$match: {isFavorite: true}}
       ]);
+  }
+
+  public async addOrRemoveFavorite(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    return await this.offerModel
+      .findByIdAndUpdate(offerId, dto, {new: true})
+      .exec();
   }
 }

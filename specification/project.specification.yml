@@ -231,46 +231,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthError"
-  /six-cities/premium:
-    get:
-      tags:
-        - premium
-      summary: Премиальные предложения для города
-      description: Сервис предоставляет ресурс для получения списка из не более 3 премиальных предложений для определённого города, отсортированный по дате публикации (по убыванию).
-      parameters:
-        - name: city
-          in: query
-          description: Город для которого необходимо получить премиальные предложения
-          required: true
-          schema:
-            type: string
-            enum:
-            - "Paris"
-            - "Cologne"
-            - "Brussels"
-            - "Amsterdam"
-            - "Hamburg"
-            - "Dusseldorf"
-        - name: X-Token
-          in: header
-          description: Авторизационный токен пользователя
-          required: false
-          schema:
-            type: string
-            example: T2VyLm5lckBnbWFpbC5jb20
-      responses:
-        "200":
-          description: Массив предложений
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MinimumOffer"
-  /six-cities/premium/{offerId}/{status}:
+  /six-cities/favorite/{offerId}/{status}:
     post:
       tags:
-        - premium
+        - favorite
       summary: Добавление и удаление предложения в/из избранного
       description: Сервис предоставляет ресурс для добавления и удаления любого предложения в/из списка избранных предложений с идентификатором `offerId`.
         Ресурс доступен только авторизованным клиентам.
@@ -312,7 +276,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotFoundError"
-  /six-cities/sign-up:
+  /six-cities/premium:
+    get:
+      tags:
+        - premium
+      summary: Премиальные предложения для города
+      description: Сервис предоставляет ресурс для получения списка из не более 3 премиальных предложений для определённого города, отсортированный по дате публикации (по убыванию).
+      parameters:
+        - name: city
+          in: query
+          description: Город для которого необходимо получить премиальные предложения
+          required: true
+          schema:
+            type: string
+            enum:
+            - "Paris"
+            - "Cologne"
+            - "Brussels"
+            - "Amsterdam"
+            - "Hamburg"
+            - "Dusseldorf"
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "200":
+          description: Массив предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MinimumOffer"
+  /six-cities/user/sign-up:
     post:
       tags:
         - user
@@ -341,7 +341,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-  /six-cities/sign-in:
+  /six-cities/user/sign-in:
     post:
       tags:
         - user
@@ -404,7 +404,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotAuthError"
-  /six-cities/sign-out:
+  /six-cities/user/sign-out:
     post:
       tags:
         - user

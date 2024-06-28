@@ -5,6 +5,11 @@ export enum CommandName {
   Generate = '--generate'
 }
 
+export enum ImportOption {
+  MockData = '-m',
+  CityData = '-c'
+}
+
 export const ErrorMessage = {
   UNSPECIFIED_PATH_ERROR: 'The path to the file is not specified.',
   IMPORT_ERROR: 'Can\'t import data from file: ',

@@ -8,7 +8,7 @@ import {UserEntity} from './user.entity.js';
 import {Component} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {createMessage} from '../../helpers/index.js';
-import {ErrorMessage, InfoMessage} from './user.constant.js';
+import {InfoMessage} from './user.constant.js';
 
 @injectable()
 export class DefaultUserService implements UserService {
@@ -18,12 +18,6 @@ export class DefaultUserService implements UserService {
   ) {}
 
   public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
-    const foundUser = await this.userModel.findOne({email: dto.email}).exec();
-
-    if (foundUser !== null) {
-      throw new Error(createMessage(ErrorMessage.CREATE_USER_MESSAGE, [foundUser.email]));
-    }
-
     const user = new UserEntity(dto);
     user.setPassword(dto.password, salt);
 

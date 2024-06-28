@@ -10,7 +10,7 @@ export default class HelpCommand implements Command {
     return this.name;
   }
 
-  execute(..._parameters: string[]): void {
+  execute(_options: string[], ..._parameters: string[]): void {
     console.info(chalk.yellow(`
       Программа для подготовки данных для REST API сервера.
 
