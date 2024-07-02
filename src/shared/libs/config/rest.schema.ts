@@ -4,13 +4,14 @@ import validators from 'convict-format-with-validator';
 convict.addFormats(validators);
 
 export type RestSchema = {
-  PORT: string,
-  SALT: string,
-  DB_HOST: string,
-  DB_USER_NAME: string,
-  DB_USER_PASSWORD: string,
-  DB_PORT: string,
-  DB_NAME: string
+  PORT: string;
+  SALT: string;
+  DB_HOST: string;
+  DB_USER_NAME: string;
+  DB_USER_PASSWORD: string;
+  DB_PORT: string;
+  DB_NAME: string;
+  PINO_LEVEL: string;
 }
 
 export const configRestSchema = convict<RestSchema>({
@@ -55,5 +56,11 @@ export const configRestSchema = convict<RestSchema>({
     format: String,
     env: 'DB_NAME',
     default: null
+  },
+  PINO_LEVEL: {
+    doc: '',
+    format: String,
+    env: 'PINO_LEVEL',
+    default: 'info'
   }
 });

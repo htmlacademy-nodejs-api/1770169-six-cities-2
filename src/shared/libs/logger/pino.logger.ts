@@ -1,16 +1,20 @@
-import {injectable} from 'inversify';
+import {inject, injectable} from 'inversify';
 
 import {fileURLToPath} from 'node:url';
 
 import {Logger as LoggerType, pino, transport} from 'pino';
 
 import {Logger} from './logger.interface.js';
+import {Component} from '../../constants/index.js';
+import {Config, RestSchema} from '../config/index.js';
 
 @injectable()
 export class PinoLogger implements Logger {
   private readonly logger: LoggerType;
 
-  constructor() {
+  constructor(
+    @inject(Component.Config) private readonly config: Config<RestSchema>
+  ) {
     const destination = fileURLToPath(new URL('../../../../logs/logger.log', import.meta.url));
     const multiTransport = transport({
       targets: [
@@ -27,7 +31,10 @@ export class PinoLogger implements Logger {
       ]
     });
 
-    this.logger = pino({}, multiTransport);
+    this.logger = pino({
+      name: 'pino-express',
+      level: this.config.get('PINO_LEVEL')
+    }, multiTransport);
   }
 
   public info(message: string, ...args: unknown[]): void {
