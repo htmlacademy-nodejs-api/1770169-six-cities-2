@@ -31,8 +31,9 @@ export class CLIApplication {
     const parsedCommand = CommandParser.parse(argv);
     const [commandName] = Object.keys(parsedCommand);
     const command = this.getCommand(commandName);
-    const commandArguments = parsedCommand[commandName] ?? [];
-    command.execute(...commandArguments);
+    const commandArguments = parsedCommand[commandName].arguments ?? [];
+    const commandOptions = parsedCommand[commandName].options ?? [];
+    command.execute(commandOptions, ...commandArguments);
   }
 
   private getDefaultCommand(): Command | never {

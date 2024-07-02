@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 
+import {ClassConstructor, plainToInstance} from 'class-transformer';
+
 import {randomBytes} from 'node:crypto';
 
 export const getRandomNumber = (min: number, max: number, numAfterDigit = 0): number => +(Math.random() * (max - min) + min).toFixed(numAfterDigit);
@@ -37,3 +39,7 @@ export const createMessage = <T>(message: string, expressions: T[] = []): string
 
   return expressions.reduce((accumulator: string, currentValue: T) => accumulator.replace(/%([^%]*)%/, String(currentValue)), message);
 };
+
+export const fillDto = <T, K>(someDto: ClassConstructor<T>, plainObject: K) => plainToInstance(someDto, plainObject, {excludeExtraneousValues: true});
+
+export const createErrorObject = (message: string) => ({error: message});
