@@ -1,5 +1,7 @@
 export const COLLECTION_NAME = 'offer';
 export const DETAIL = 'OfferController';
+export const IMAGES_SIZE = 6;
+export const GOODS_MIN_SIZE = 1;
 
 export enum MaxView {
   Image = 6,

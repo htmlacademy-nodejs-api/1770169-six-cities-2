@@ -1,15 +1,8 @@
 import {Ref, defaultClasses, getModelForClass, modelOptions, prop} from '@typegoose/typegoose';
 
-import {Facilities, Housing, OfferFacilities, OfferType} from '../../types/index.js';
+import {OfferFacilities, OfferType} from '../../types/index.js';
 import {UserEntity} from '../user/index.js';
-import {
-  Bedroom,
-  COLLECTION_NAME,
-  Description,
-  Guest,
-  Price,
-  Title
-} from './offer.constant.js';
+import {COLLECTION_NAME} from './offer.constant.js';
 import {CityEntity} from '../city/index.js';
 import {LocationEntity} from '../location/index.js';
 
@@ -25,10 +18,10 @@ export interface OfferEntity extends defaultClasses.Base {}
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class OfferEntity extends defaultClasses.TimeStamps {
-  @prop({trim: true, required: true, minlength: Title.Min, maxlength: Title.Max})
+  @prop({trim: true, required: true})
   public title: string;
 
-  @prop({trim: true, required: true, minlength: Description.Min, maxlength: Description.Max})
+  @prop({trim: true, required: true})
   public description: string;
 
   @prop({required: true})
@@ -40,7 +33,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public previewImage: string;
 
-  @prop({required: true, type: () => String})
+  @prop({required: true})
   public images: string[];
 
   @prop({required: true})
@@ -49,19 +42,19 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public isFavorite: boolean;
 
-  @prop({required: true, type: () => String, enum: Housing})
+  @prop({required: true})
   public type: OfferType;
 
-  @prop({required: true, min: Bedroom.Min, max: Bedroom.Max})
+  @prop({required: true})
   public bedrooms: number;
 
-  @prop({required: true, min: Guest.Min, max: Guest.Max})
+  @prop({required: true})
   public guests: number;
 
-  @prop({required: true, min: Price.Min, max: Price.Max})
+  @prop({required: true})
   public price: number;
 
-  @prop({required: true, type: () => String, enum: Facilities})
+  @prop({required: true})
   public goods: OfferFacilities[];
 
   @prop({required: true, ref: UserEntity})
