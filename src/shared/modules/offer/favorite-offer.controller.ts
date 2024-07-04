@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 
 import {inject, injectable} from 'inversify';
 
-import {BaseController, HttpMethod} from '../../libs/rest/index.js';
+import {BaseController, HttpMethod, ValidateOjectIdMiddleware} from '../../libs/rest/index.js';
 import {Component, RADIX} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {OfferService} from './offer-service.interface.js';
@@ -20,16 +20,21 @@ export class FavoriteOfferController extends BaseController {
     super(logger);
 
     this.logger.info(InfoMessage.REGISTER_FAVORITE_OFFER_ROUTES_MESSAGE);
-    this.addRoute({path: '/', method: HttpMethod.Get, handler: this.findFavoriteOffers});
-    this.addRoute({path: '/:offerId', method: HttpMethod.Post, handler: this.addOrRemoveFavoriteOffers});
+    this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Patch,
+      handler: this.update,
+      middlewares: [new ValidateOjectIdMiddleware('offerId')]
+    });
   }
 
-  public async findFavoriteOffers(_req: Request, res: Response, _next: NextFunction): Promise<void> {
+  public async index(_req: Request, res: Response, _next: NextFunction): Promise<void> {
     const offers = await this.offerService.findByFavorite();
     this.ok(res, fillDto(OfferRdo, offers));
   }
 
-  public async addOrRemoveFavoriteOffers({params, query}: UpdateOfferRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async update({params, query}: UpdateOfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const offers = await this.offerService.addOrRemoveFavorite(params.offerId, {isFavorite: !!parseInt(query.status as string, RADIX)});
     this.noContent(res, fillDto(OfferRdo, offers));
   }

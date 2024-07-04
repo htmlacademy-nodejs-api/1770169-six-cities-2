@@ -2,7 +2,7 @@ import {Response} from 'express';
 
 import {inject, injectable} from 'inversify';
 
-import {BaseController, HttpMethod} from '../../libs/rest/index.js';
+import {BaseController, HttpMethod, ValidateOjectIdMiddleware} from '../../libs/rest/index.js';
 import {Component} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {CommentService} from './comment-service.interface.js';
@@ -20,16 +20,25 @@ export class CommentController extends BaseController {
     super(logger);
 
     this.logger.info(InfoMessage.REGISTER_ROUTES_MESSAGE);
-    this.addRoute({path: '/:offerId', method: HttpMethod.Get, handler: this.findComments});
-    this.addRoute({path: '/:offerId', method: HttpMethod.Post, handler: this.createComments});
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Get,
+      handler: this.index,
+      middlewares: [new ValidateOjectIdMiddleware('offerId')]});
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateOjectIdMiddleware('offerId')]
+    });
   }
 
-  public async findComments({params}: CommentRequest, res: Response): Promise<void> {
+  public async index({params}: CommentRequest, res: Response): Promise<void> {
     const comments = await this.commentService.find(params.offerId);
     this.ok(res, fillDto(CommentRdo, comments));
   }
 
-  public async createComments({body, params}: CommentRequest, res: Response): Promise<void> {
+  public async create({body, params}: CommentRequest, res: Response): Promise<void> {
     const comment = await this.commentService.create({...body, offer: params.offerId, user: ''});
     this.created(res, fillDto(CommentRdo, comment));
   }

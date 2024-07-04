@@ -9,6 +9,8 @@ import {StatusCodes} from 'http-status-codes';
 import {Logger} from '../../logger/index.js';
 import {Route} from '../types/route.interface.js';
 import {Controller} from './controller.interface.js';
+import {createMessage} from '../../../helpers/index.js';
+import {InfoMessage} from '../rest.constant.js';
 
 @injectable()
 export abstract class BaseController implements Controller {
@@ -25,8 +27,12 @@ export abstract class BaseController implements Controller {
   }
 
   public addRoute(route: Route): void {
-    this.router[route.method](route.path, asyncHandler(route.handler.bind(this)));
-    this.logger.info(`Route registered: ${route.method.toUpperCase()} ${route.path}`);
+    const handlers = [
+      ...(route.middlewares?.map((middleware) => asyncHandler(middleware.execute.bind(middleware))) ?? []),
+      asyncHandler(route.handler.bind(this))
+    ];
+    this.router[route.method](route.path, handlers);
+    this.logger.info(createMessage(InfoMessage.ROUTE_REGISTERED_MESSAGE, [route.method.toUpperCase(), route.path]));
   }
 
   public send<T>(res: Response, statusCode: number, data: T): void {

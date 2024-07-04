@@ -117,7 +117,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotFoundError"
-    put:
+    patch:
       tags:
         - offers
       summary: Редактирование предложения
@@ -232,7 +232,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/AuthError"
   /six-cities/favorite/{offerId}/{status}:
-    post:
+    patch:
       tags:
         - favorite
       summary: Добавление и удаление предложения в/из избранного
