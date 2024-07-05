@@ -32,7 +32,7 @@ export class CreateOfferDto {
   @IsDateString({}, {message: OfferValidationMessage.date.invalidFormat})
   public date: Date;
 
-  @IsEnum(OfferCity, {message: OfferValidationMessage.type.invalid})
+  @IsEnum(OfferCity, {message: OfferValidationMessage.city.invalid})
   public city: OfferCity;
 
   @IsString({message: OfferValidationMessage.previewImage.invalidFormat})

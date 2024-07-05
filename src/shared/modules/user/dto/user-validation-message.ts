@@ -12,7 +12,7 @@ export const UserValidationMessage = {
   },
   password: {
     invalidFormat: 'Password is required',
-    lengthField: 'Min length for password is 6, max is 12'
+    lengthField: 'Length for password min is 6, max is 12'
   },
   userType: {
     invalid: 'User type must be regular and pro'

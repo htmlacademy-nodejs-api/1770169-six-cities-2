@@ -13,7 +13,7 @@ export const OfferValidationMessage = {
     invalidFormat: 'Date must be a valid ISO date',
   },
   city: {
-    invalid: 'Name must be Paris, Cologne, Brussels, Amsterdam, Hamburg and Dusseldorf',
+    invalid: 'City must be Paris, Cologne, Brussels, Amsterdam, Hamburg and Dusseldorf',
   },
   previewImage: {
     invalidFormat: 'Preview image must be an string',

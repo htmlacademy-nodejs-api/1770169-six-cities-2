@@ -1,8 +1,8 @@
 export const CommentValidationMessage = {
   comment: {
     invalidFormat: 'Comment must be an string',
-    minLength: 'Minimum title length must be 5',
-    maxLength: 'Maximum title length must be 1024',
+    minLength: 'Minimum comment length must be 5',
+    maxLength: 'Maximum comment length must be 1024',
   },
   date: {
     invalidFormat: 'Date must be a valid ISO date',
