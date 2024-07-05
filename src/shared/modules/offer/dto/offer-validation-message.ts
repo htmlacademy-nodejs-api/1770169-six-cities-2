@@ -13,7 +13,7 @@ export const OfferValidationMessage = {
     invalidFormat: 'Date must be a valid ISO date',
   },
   city: {
-    invalidId: 'CityId field must be a valid id',
+    invalid: 'Name must be Paris, Cologne, Brussels, Amsterdam, Hamburg and Dusseldorf',
   },
   previewImage: {
     invalidFormat: 'Preview image must be an string',
@@ -51,8 +51,7 @@ export const OfferValidationMessage = {
     minSize: 'At least one goods',
     invalid: 'Goods must be one or more Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels and Fridge'
   },
-  user: {
-    invalidId: 'UserId field must be a valid id',
-  },
-  location: {}
+  location: {
+    invalidFormat: 'Location must be an object',
+  }
 } as const;

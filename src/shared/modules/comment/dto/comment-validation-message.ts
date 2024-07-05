@@ -11,11 +11,5 @@ export const CommentValidationMessage = {
     invalidFormat: 'Rating must be an integer',
     minValue: 'Minimum rating is 1',
     maxValue: 'Maximum rating is 5',
-  },
-  offer: {
-    invalidId: 'OfferId field must be a valid id',
-  },
-  user: {
-    invalidId: 'UserId field must be a valid id',
   }
 } as const;

@@ -11,7 +11,6 @@ export type RestSchema = {
   DB_USER_PASSWORD: string;
   DB_PORT: string;
   DB_NAME: string;
-  PINO_LEVEL: string;
 }
 
 export const configRestSchema = convict<RestSchema>({
@@ -56,11 +55,5 @@ export const configRestSchema = convict<RestSchema>({
     format: String,
     env: 'DB_NAME',
     default: null
-  },
-  PINO_LEVEL: {
-    doc: '',
-    format: String,
-    env: 'PINO_LEVEL',
-    default: 'info'
   }
 });

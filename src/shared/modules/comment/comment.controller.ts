@@ -2,7 +2,7 @@ import {Response} from 'express';
 
 import {inject, injectable} from 'inversify';
 
-import {BaseController, HttpMethod, ValidateOjectIdMiddleware} from '../../libs/rest/index.js';
+import {BaseController, HttpMethod, ValidateDtoMiddleware, ValidateOjectIdMiddleware} from '../../libs/rest/index.js';
 import {Component} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {CommentService} from './comment-service.interface.js';
@@ -10,6 +10,7 @@ import {fillDto} from '../../helpers/index.js';
 import {CommentRdo} from './rdo/comment.rdo.js';
 import {CommentRequest} from './types/comment-request.type.js';
 import {InfoMessage} from './comment.constant.js';
+import {CreateCommentDto} from './dto/create-comment.dto.js';
 
 @injectable()
 export class CommentController extends BaseController {
@@ -29,7 +30,10 @@ export class CommentController extends BaseController {
       path: '/:offerId',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateOjectIdMiddleware('offerId')]
+      middlewares: [
+        new ValidateOjectIdMiddleware('offerId'),
+        new ValidateDtoMiddleware(CreateCommentDto)
+      ]
     });
   }
 

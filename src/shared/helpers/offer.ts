@@ -1,5 +1,5 @@
 import {DEFAULT_PASSWORD, RADIX, Separator} from '../constants/index.js';
-import {CityName, Offer, OfferFacilities, OfferType} from '../types/index.js';
+import {Facilities, Housing, Offer, OfferCity} from '../types/index.js';
 import {UserType} from '../types/user-type.enum.js';
 
 export const createOffer = (offerData: string): Offer => {
@@ -33,7 +33,7 @@ export const createOffer = (offerData: string): Offer => {
     description,
     date: new Date(date),
     city: {
-      name: cityName as CityName,
+      name: cityName as OfferCity,
       location: {
         latitude: Number.parseFloat(cityLatitude),
         longitude: Number.parseFloat(cityLongitude)
@@ -43,11 +43,11 @@ export const createOffer = (offerData: string): Offer => {
     images: images.split(Separator.Enumeration).map((image) => image),
     isPremium: Boolean(isPremium),
     isFavorite: Boolean(isFavorite),
-    type: type as OfferType,
+    type: type as `${Housing}`,
     bedrooms: Number.parseInt(bedrooms, RADIX),
     guests: Number.parseInt(guests, RADIX),
     price: Number.parseInt(price, RADIX),
-    goods: goods.split(Separator.Enumeration).map((good) => good) as OfferFacilities[],
+    goods: goods.split(Separator.Enumeration).map((good) => good) as `${Facilities}`[],
     user: {
       name: userName,
       email,

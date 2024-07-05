@@ -9,3 +9,4 @@ export * from './exception-filter/app-exception-filter.js';
 export * from './middleware/middleware.interface.js';
 export * from './rest.constant.js';
 export * from './middleware/validate-object-id.middleware.js';
+export * from './middleware/validate-dto.middleware.js';

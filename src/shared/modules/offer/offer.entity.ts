@@ -1,6 +1,6 @@
 import {Ref, defaultClasses, getModelForClass, modelOptions, prop} from '@typegoose/typegoose';
 
-import {OfferFacilities, OfferType} from '../../types/index.js';
+import {Facilities, Housing} from '../../types/index.js';
 import {UserEntity} from '../user/index.js';
 import {COLLECTION_NAME} from './offer.constant.js';
 import {CityEntity} from '../city/index.js';
@@ -43,7 +43,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public isFavorite: boolean;
 
   @prop({required: true})
-  public type: OfferType;
+  public type: `${Housing}`;
 
   @prop({required: true})
   public bedrooms: number;
@@ -55,7 +55,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public price: number;
 
   @prop({required: true})
-  public goods: OfferFacilities[];
+  public goods: `${Facilities}`[];
 
   @prop({required: true, ref: UserEntity})
   public user: Ref<UserEntity>;

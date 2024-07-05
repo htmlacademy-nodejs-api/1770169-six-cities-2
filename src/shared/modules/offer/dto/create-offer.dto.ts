@@ -5,9 +5,8 @@ import {
   IsBoolean,
   IsDateString,
   IsEnum,
-  IsIn,
   IsInt,
-  IsMongoId,
+  IsObject,
   IsString,
   Max,
   MaxLength,
@@ -15,7 +14,7 @@ import {
   MinLength
 } from 'class-validator';
 
-import {Facilities, Housing, Location, OfferFacilities, OfferType} from '../../../types/index.js';
+import {Facilities, Housing, Location, OfferCity} from '../../../types/index.js';
 import {OfferValidationMessage} from './offer-validation-message.js';
 import {Bedroom, Description, GOODS_MIN_SIZE, Guest, IMAGES_SIZE, Price, Title} from '../offer.constant.js';
 
@@ -33,8 +32,8 @@ export class CreateOfferDto {
   @IsDateString({}, {message: OfferValidationMessage.date.invalidFormat})
   public date: Date;
 
-  @IsMongoId({message: OfferValidationMessage.city.invalidId})
-  public city: string;
+  @IsEnum(OfferCity, {message: OfferValidationMessage.type.invalid})
+  public city: OfferCity;
 
   @IsString({message: OfferValidationMessage.previewImage.invalidFormat})
   public previewImage: string;
@@ -51,7 +50,7 @@ export class CreateOfferDto {
   public isFavorite: boolean;
 
   @IsEnum(Housing, {each: true, message: OfferValidationMessage.type.invalid})
-  public type: OfferType;
+  public type: `${Housing}`;
 
   @IsInt({message: OfferValidationMessage.bedrooms.invalidFormat})
   @Min(Bedroom.Min, {message: OfferValidationMessage.bedrooms.minValue})
@@ -70,11 +69,11 @@ export class CreateOfferDto {
 
   @IsArray({message: OfferValidationMessage.goods.invalidFormat})
   @ArrayMinSize(GOODS_MIN_SIZE, {message: OfferValidationMessage.goods.minSize})
-  @IsIn(Object.values(Facilities), {message: OfferValidationMessage.goods.invalid})
-  public goods: OfferFacilities[];
+  @IsEnum(Facilities, {each: true, message: OfferValidationMessage.goods.invalid})
+  public goods: `${Facilities}`[];
 
-  @IsMongoId({message: OfferValidationMessage.city.invalidId})
   public user: string;
 
+  @IsObject({message: OfferValidationMessage.location.invalidFormat})
   public location: string | Location;
 }

@@ -1,15 +1,15 @@
-import {CityName} from './city.type.js';
+import {OfferCity} from './index.js';
 
 export type MockServerDataType = {
   titles: string[];
   descriptions: string[];
-  cities: CityName[];
+  cities: OfferCity[];
   images: string[];
   types: string[];
   goods: string[];
   names: string[];
   avatars: string[];
   coordinates: {
-    [Name in CityName]: [number, number][]
+    [Name in OfferCity]: [number, number][]
   };
 }

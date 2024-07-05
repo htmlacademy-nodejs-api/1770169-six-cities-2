@@ -4,7 +4,7 @@ import {inject, injectable} from 'inversify';
 
 import {StatusCodes} from 'http-status-codes';
 
-import {BaseController, HttpMethod, ValidateOjectIdMiddleware} from '../../libs/rest/index.js';
+import {BaseController, HttpMethod, ValidateDtoMiddleware, ValidateOjectIdMiddleware} from '../../libs/rest/index.js';
 import {Component} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {OfferService} from './offer-service.interface.js';
@@ -18,6 +18,8 @@ import {OfferExtendedRdo} from './rdo/offer-extended-rdo.js';
 import {HttpError} from '../../libs/rest/errors/index.js';
 import {DETAIL, ErrorMessage, InfoMessage} from './offer.constant.js';
 import {CommentService} from './../comment/index.js';
+import {CreateOfferDto} from './dto/create-offer.dto.js';
+import {UpdateOfferDto} from './dto/update-offer.dto.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -38,12 +40,20 @@ export class OfferController extends BaseController {
       handler: this.show,
       middlewares: [new ValidateOjectIdMiddleware('offerId')]
     });
-    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]
+    });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Patch,
       handler: this.update,
-      middlewares: [new ValidateOjectIdMiddleware('offerId')]
+      middlewares: [
+        new ValidateOjectIdMiddleware('offerId'),
+        new ValidateDtoMiddleware(UpdateOfferDto)
+      ]
     });
     this.addRoute({
       path: '/:offerId',
@@ -70,7 +80,7 @@ export class OfferController extends BaseController {
     if (!city) {
       throw new HttpError(StatusCodes.CONFLICT, createMessage(ErrorMessage.CITY_NOT_FOUND_MESSAGE, [body.city]), DETAIL);
     }
-    const offer = await this.offerService.create({...body, city: city.id, user: '667d452a24dde3e029b27198', location: location});
+    const offer = await this.offerService.create({...body, city: city.id, user: '667d452a24dde3e029b27198', location: location.id});
     this.created(res, fillDto(OfferRdo, offer));
   }
 
@@ -96,8 +106,8 @@ export class OfferController extends BaseController {
   }
 
   public async delete({params}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
-    const offer = await this.offerService.deleteById(params.offerId);
+    await this.offerService.deleteById(params.offerId);
     await this.commentService.deleteById(params.offerId);
-    this.noContent(res, offer);
+    this.noContent(res, null);
   }
 }

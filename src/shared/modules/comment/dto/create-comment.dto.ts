@@ -1,4 +1,4 @@
-import {IsDateString, IsInt, IsMongoId, IsString, Max, MaxLength, Min, MinLength} from 'class-validator';
+import {IsDateString, IsInt, IsString, Max, MaxLength, Min, MinLength} from 'class-validator';
 
 import {Comment, Rating} from '../comment.constant.js';
 import {CommentValidationMessage} from './comment-validation-message.js';
@@ -17,9 +17,7 @@ export class CreateCommentDto {
   @Max(Rating.Max, {message: CommentValidationMessage.rating.maxValue})
   public rating: number;
 
-  @IsMongoId({message: CommentValidationMessage.offer.invalidId})
   public offer: string;
 
-  @IsMongoId({message: CommentValidationMessage.user.invalidId})
   public user: string;
 }
