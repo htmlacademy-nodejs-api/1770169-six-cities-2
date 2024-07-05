@@ -1,7 +1,7 @@
 import {UserValidationMessage} from './user-validation-message.js';
-import {IsEmail, IsEnum, IsOptional, IsString, Length, MaxLength, MinLength} from 'class-validator';
+import {IsEmail, IsEnum, IsOptional, IsString, Length, Matches, MaxLength, MinLength} from 'class-validator';
 import {UserType} from '../../../types/user-type.enum.js';
-import {Password, UserName} from '../user.constant.js';
+import {AVATAR_EXTENSION_REGEX, Password, UserName} from '../user.constant.js';
 
 export class CreateUserDto {
   @IsString({message: UserValidationMessage.name.invalidFormat})
@@ -14,6 +14,7 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString({message: UserValidationMessage.avatar.invalidFormat})
+  @Matches(AVATAR_EXTENSION_REGEX, {message: UserValidationMessage.avatar.invalid})
   public avatar?: string;
 
   @IsString({message: UserValidationMessage.password.invalidFormat})

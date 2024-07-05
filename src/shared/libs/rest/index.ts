@@ -1,4 +1,5 @@
 export * from './types/route.interface.js';
+export * from './types/document-exists.interface.js';
 export * from './types/http-method.enum.js';
 export * from './types/request-body.type.js';
 export * from './types/response-body.type.js';
@@ -10,3 +11,4 @@ export * from './middleware/middleware.interface.js';
 export * from './rest.constant.js';
 export * from './middleware/validate-object-id.middleware.js';
 export * from './middleware/validate-dto.middleware.js';
+export * from './middleware/document-exists.middleware.js';

@@ -39,4 +39,9 @@ export class DefaultCityService implements CityService {
 
     return this.create(dto);
   }
+
+  public async exists(value: string): Promise<boolean> {
+    return (await this.cityModel
+      .exists({name: value})) !== null;
+  }
 }

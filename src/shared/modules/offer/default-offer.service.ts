@@ -100,4 +100,9 @@ export class DefaultOfferService implements OfferService {
       .findByIdAndUpdate(offerId, dto, {new: true})
       .exec();
   }
+
+  public async exists(value: string): Promise<boolean> {
+    return (await this.offerModel
+      .exists({_id: value})) !== null;
+  }
 }

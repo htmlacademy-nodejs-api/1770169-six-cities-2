@@ -47,10 +47,6 @@ export const InfoMessage = {
   REGISTER_PREMIUM_OFFER_ROUTES_MESSAGE: 'Register routes for PremiumOfferController.'
 };
 
-export const ErrorMessage = {
-  CITY_NOT_FOUND_MESSAGE: 'This city: \'%city%\' was not found in the list of available cities.',
-};
-
 export const AGGREGATION_OPERATIONS = {
   User: [
     {
