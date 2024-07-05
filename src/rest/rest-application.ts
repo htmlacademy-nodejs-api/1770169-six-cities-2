@@ -6,7 +6,7 @@ import 'reflect-metadata';
 import {Component} from '../shared/constants/index.js';
 import {Config, RestSchema} from '../shared/libs/config/index.js';
 import {Logger} from '../shared/libs/logger/index.js';
-import {getMongoURI} from '../shared/helpers/index.js';
+import {getMongoURI, createMessage} from '../shared/helpers/index.js';
 import {InfoMessage} from './rest.constant.js';
 import {DatabaseClient} from '../shared/libs/database-client/index.js';
 import {Controller, ExceptionFilter} from '../shared/libs/rest/index.js';
@@ -37,8 +37,8 @@ export class RestApplication {
       this.config.get('DB_PORT'),
       this.config.get('DB_NAME')
     );
-
-    return this.databaseClient.connect(uri);
+    console.log(uri);
+    return this.databaseClient.connect('mongodb+srv://user:user@work.koij1qi.mongodb.net/');
   }
 
   private async initServer() {
@@ -83,6 +83,6 @@ export class RestApplication {
 
     this.logger.info(InfoMessage.SERVER_INIT_MESSAGE);
     await this.initServer();
-    this.logger.info(InfoMessage.SERVER_INIT_COMPLETED_MESSAGE);
+    this.logger.info(createMessage(InfoMessage.SERVER_INIT_COMPLETED_MESSAGE, [this.config.get('PORT')]));
   }
 }

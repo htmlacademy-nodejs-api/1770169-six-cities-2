@@ -4,13 +4,13 @@ import validators from 'convict-format-with-validator';
 convict.addFormats(validators);
 
 export type RestSchema = {
-  PORT: string,
-  SALT: string,
-  DB_HOST: string,
-  DB_USER_NAME: string,
-  DB_USER_PASSWORD: string,
-  DB_PORT: string,
-  DB_NAME: string
+  PORT: string;
+  SALT: string;
+  DB_HOST: string;
+  DB_USER_NAME: string;
+  DB_USER_PASSWORD: string;
+  DB_PORT: string;
+  DB_NAME: string;
 }
 
 export const configRestSchema = convict<RestSchema>({

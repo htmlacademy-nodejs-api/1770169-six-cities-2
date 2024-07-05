@@ -6,7 +6,7 @@ import {CreateOfferDto} from '../dto/create-offer.dto.js';
 import {UpdateOfferDto} from '../dto/update-offer.dto.js';
 
 export type RequestQuery = {
-  count: string;
+  count?: string;
   city: string;
   status: string;
 } | Query;

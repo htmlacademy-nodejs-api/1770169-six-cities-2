@@ -25,13 +25,13 @@ export class UserController extends BaseController {
     super(logger);
 
     this.logger.info(InfoMessage.REGISTER_ROUTES_MESSAGE);
-    this.addRoute({path: '/sign-up', method: HttpMethod.Post, handler: this.createUser});
-    this.addRoute({path: '/sign-in', method: HttpMethod.Post, handler: this.loginUser});
-    this.addRoute({path: '/sign-in', method: HttpMethod.Get, handler: this.checkUserStatus});
-    this.addRoute({path: '/sign-out', method: HttpMethod.Post, handler: this.logoutUser});
+    this.addRoute({path: '/sign-up', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({path: '/sign-in', method: HttpMethod.Post, handler: this.login});
+    this.addRoute({path: '/sign-in', method: HttpMethod.Get, handler: this.check});
+    this.addRoute({path: '/sign-out', method: HttpMethod.Post, handler: this.logout});
   }
 
-  public async createUser({body}: UserRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async create({body}: UserRequest, res: Response, _next: NextFunction): Promise<void> {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (existsUser) {
@@ -41,7 +41,7 @@ export class UserController extends BaseController {
     this.created(res, fillDto(UserRdo, user));
   }
 
-  public async loginUser({body}: AuthUserRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async login({body}: AuthUserRequest, res: Response, _next: NextFunction): Promise<void> {
     const user = await this.userService.findByEmail(body.email);
 
     if (!user) {
@@ -54,7 +54,7 @@ export class UserController extends BaseController {
     this.ok(res, {token: 'T2VyLm5lckBnbWFpbC5jb20'});
   }
 
-  public async checkUserStatus(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
+  public async check(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
 
-  public async logoutUser(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
+  public async logout(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
 }

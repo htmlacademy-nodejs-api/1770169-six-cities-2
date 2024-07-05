@@ -4,7 +4,7 @@ import {inject, injectable} from 'inversify';
 
 import {StatusCodes} from 'http-status-codes';
 
-import {BaseController, HttpMethod} from '../../libs/rest/index.js';
+import {BaseController, HttpMethod, ValidateDtoMiddleware, ValidateOjectIdMiddleware} from '../../libs/rest/index.js';
 import {Component} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {OfferService} from './offer-service.interface.js';
@@ -17,6 +17,9 @@ import {Location} from '../../types/index.js';
 import {OfferExtendedRdo} from './rdo/offer-extended-rdo.js';
 import {HttpError} from '../../libs/rest/errors/index.js';
 import {DETAIL, ErrorMessage, InfoMessage} from './offer.constant.js';
+import {CommentService} from './../comment/index.js';
+import {CreateOfferDto} from './dto/create-offer.dto.js';
+import {UpdateOfferDto} from './dto/update-offer.dto.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -24,40 +27,64 @@ export class OfferController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.CityService) private readonly cityService: CityService,
-    @inject(Component.LocationService) private readonly locationService: LocationService
+    @inject(Component.LocationService) private readonly locationService: LocationService,
+    @inject(Component.CommentService) private readonly commentService: CommentService
   ) {
     super(logger);
 
     this.logger.info(InfoMessage.REGISTER_OFFER_ROUTES_MESSAGE);
-    this.addRoute({path: '/', method: HttpMethod.Get, handler: this.findOffers});
-    this.addRoute({path: '/:offerId', method: HttpMethod.Get, handler: this.findOffersById});
-    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.createOffer});
-    this.addRoute({path: '/:offerId', method: HttpMethod.Put, handler: this.updateOffer});
-    this.addRoute({path: '/:offerId', method: HttpMethod.Delete, handler: this.deleteOffer});
+    this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Get,
+      handler: this.show,
+      middlewares: [new ValidateOjectIdMiddleware('offerId')]
+    });
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]
+    });
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Patch,
+      handler: this.update,
+      middlewares: [
+        new ValidateOjectIdMiddleware('offerId'),
+        new ValidateDtoMiddleware(UpdateOfferDto)
+      ]
+    });
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.delete,
+      middlewares: [new ValidateOjectIdMiddleware('offerId')]
+    });
   }
 
-  public async findOffers({query}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async index({query}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const offers = await this.offerService.find(Number(query.count));
     this.ok(res, fillDto(OfferRdo, offers));
   }
 
-  public async findOffersById({params}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async show({params}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const offer = await this.offerService.findById(params.offerId);
     this.ok(res, fillDto(OfferExtendedRdo, offer));
   }
 
-  public async createOffer({body}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async create({body}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const city = await this.cityService.findByCityName(body.city);
     const location = await this.locationService.findOrCreate(body.location as Location);
 
     if (!city) {
       throw new HttpError(StatusCodes.CONFLICT, createMessage(ErrorMessage.CITY_NOT_FOUND_MESSAGE, [body.city]), DETAIL);
     }
-    const offer = await this.offerService.create({...body, city: city.id, user: '667d452a24dde3e029b27198', location: location});
+    const offer = await this.offerService.create({...body, city: city.id, user: '667d452a24dde3e029b27198', location: location.id});
     this.created(res, fillDto(OfferRdo, offer));
   }
 
-  public async updateOffer({body, params}: UpdateOfferRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async update({body, params}: UpdateOfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const update = {...body};
 
     if (body.city) {
@@ -78,8 +105,9 @@ export class OfferController extends BaseController {
     this.ok(res, fillDto(OfferRdo, offer));
   }
 
-  public async deleteOffer({params}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
-    const offer = await this.offerService.deleteById(params.offerId);
-    this.noContent(res, offer);
+  public async delete({params}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
+    await this.offerService.deleteById(params.offerId);
+    await this.commentService.deleteById(params.offerId);
+    this.noContent(res, null);
   }
 }
