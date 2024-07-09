@@ -9,6 +9,7 @@ import {Component} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {createMessage} from '../../helpers/index.js';
 import {InfoMessage} from './user.constant.js';
+import {UpdateUserDto} from './dto/update-user.dto.js';
 
 @injectable()
 export class DefaultUserService implements UserService {
@@ -37,5 +38,16 @@ export class DefaultUserService implements UserService {
     return await this.userModel
       .findById(userId)
       .exec();
+  }
+
+  public async uploadAvatar(userId: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null> {
+    return await this.userModel
+      .findByIdAndUpdate(userId, dto, {new: true})
+      .exec();
+  }
+
+  public async exists(value: string): Promise<boolean> {
+    return (await this.userModel
+      .exists({_id: value})) !== null;
   }
 }

@@ -9,6 +9,7 @@ export const UserValidationMessage = {
   },
   avatar: {
     invalidFormat: 'Avatar must be an string',
+    invalid: 'The image format should be .jpg or .png'
   },
   password: {
     invalidFormat: 'Password is required',

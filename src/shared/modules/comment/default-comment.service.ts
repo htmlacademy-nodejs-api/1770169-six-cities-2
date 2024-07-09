@@ -41,4 +41,9 @@ export class DefaultCommentService implements CommentService {
 
     return result.deletedCount;
   }
+
+  public async exists(value: string): Promise<boolean> {
+    return (await this.commentModel
+      .exists({offer: value})) !== null;
+  }
 }

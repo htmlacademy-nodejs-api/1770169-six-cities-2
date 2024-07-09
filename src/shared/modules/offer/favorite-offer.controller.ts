@@ -2,7 +2,13 @@ import {NextFunction, Request, Response} from 'express';
 
 import {inject, injectable} from 'inversify';
 
-import {BaseController, HttpMethod, ValidateDtoMiddleware, ValidateOjectIdMiddleware} from '../../libs/rest/index.js';
+import {
+  BaseController,
+  DocumentExistsMiddleware,
+  HttpMethod,
+  ValidateDtoMiddleware,
+  ValidateOjectIdMiddleware
+} from '../../libs/rest/index.js';
 import {Component, RADIX} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {OfferService} from './offer-service.interface.js';
@@ -28,7 +34,12 @@ export class FavoriteOfferController extends BaseController {
       handler: this.update,
       middlewares: [
         new ValidateOjectIdMiddleware('offerId'),
-        new ValidateDtoMiddleware(UpdateOfferDto)
+        new ValidateDtoMiddleware(UpdateOfferDto),
+        new DocumentExistsMiddleware({
+          service: this.offerService,
+          entityName: 'Offer',
+          paramName: 'offerId'
+        })
       ]
     });
   }

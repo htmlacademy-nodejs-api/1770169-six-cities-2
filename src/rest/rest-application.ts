@@ -37,8 +37,8 @@ export class RestApplication {
       this.config.get('DB_PORT'),
       this.config.get('DB_NAME')
     );
-    console.log(uri);
-    return this.databaseClient.connect('mongodb+srv://user:user@work.koij1qi.mongodb.net/');
+
+    return this.databaseClient.connect(uri);
   }
 
   private async initServer() {
@@ -56,6 +56,7 @@ export class RestApplication {
 
   private async initMiddlewares() {
     this.server.use(express.json());
+    this.server.use('./upload', express.static(this.config.get('UPLOAD_DIRECTORY')));
   }
 
   private async initExceptionFilters() {

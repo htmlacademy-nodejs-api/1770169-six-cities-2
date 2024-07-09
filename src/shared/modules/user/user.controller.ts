@@ -4,7 +4,7 @@ import {inject, injectable} from 'inversify';
 
 import {StatusCodes} from 'http-status-codes';
 
-import {BaseController, HttpMethod} from '../../libs/rest/index.js';
+import {BaseController, DocumentExistsMiddleware, HttpMethod, UploadFileMiddleware} from '../../libs/rest/index.js';
 import {Component} from './../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {UserService} from './user-service.interface.js';
@@ -14,6 +14,7 @@ import {createMessage, createSHA256, fillDto} from '../../helpers/index.js';
 import {UserRdo} from './rdo/user-rdo.js';
 import {HttpError} from '../../libs/rest/errors/index.js';
 import {DETAIL, ErrorMessage, InfoMessage} from './user.constant.js';
+import {UploadAvatarRdo} from './rdo/upload-avatar-rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -29,6 +30,15 @@ export class UserController extends BaseController {
     this.addRoute({path: '/sign-in', method: HttpMethod.Post, handler: this.login});
     this.addRoute({path: '/sign-in', method: HttpMethod.Get, handler: this.check});
     this.addRoute({path: '/sign-out', method: HttpMethod.Post, handler: this.logout});
+    this.addRoute({
+      path: '/:userId/upload',
+      method: HttpMethod.Post,
+      handler: this.upload,
+      middlewares: [
+        new DocumentExistsMiddleware({service: this.userService, entityName: 'User', paramName: 'userId'}),
+        new UploadFileMiddleware(config.get('UPLOAD_DIRECTORY'), 'avatar')
+      ]
+    });
   }
 
   public async create({body}: UserRequest, res: Response, _next: NextFunction): Promise<void> {
@@ -57,4 +67,9 @@ export class UserController extends BaseController {
   public async check(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
 
   public async logout(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
+
+  public async upload({params, file}: UserRequest, res: Response, _next: NextFunction): Promise<void> {
+    const user = await this.userService.uploadAvatar(params.userId, {avatar: file?.filename});
+    this.created(res, fillDto(UploadAvatarRdo, user));
+  }
 }
