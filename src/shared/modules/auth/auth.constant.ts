@@ -9,5 +9,5 @@ export const InfoMessage = {
 export const ErrorMessage = {
   CREATE_CITY_MESSAGE: 'Create token for %email%.',
   NO_FOUND_MESSAGE: 'The user with this email: \'%email%\' was not found.',
-  INCORRECT_MESSAGE: 'Incorrect user email or password.'
+  INCORRECT_MESSAGE: 'The wrong password was entered.'
 };

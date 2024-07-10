@@ -15,8 +15,8 @@ import {Detail, ErrorMessage} from '../rest.constant.js';
 function isTokenPayload(payload: unknown): payload is TokenPayload {
   return (
     (typeof payload === 'object' && payload !== null) &&
-    ('email' in payload && typeof payload.email === 'string') &&
-    ('password' in payload && typeof payload.password === 'string')
+    ('id' in payload && typeof payload.id === 'string') &&
+    ('email' in payload && typeof payload.email === 'string')
   );
 }
 
@@ -33,7 +33,7 @@ export class ParseTokenMiddleware implements Middleware {
     const [, token] = authorization.split(' ');
 
     try {
-      const payload = await jwtVerify(token, createSecretKey(this.jwtSecret, ENCODING));
+      const {payload} = await jwtVerify(token, createSecretKey(this.jwtSecret, ENCODING));
 
       if (isTokenPayload(payload)) {
         req.locals = payload;

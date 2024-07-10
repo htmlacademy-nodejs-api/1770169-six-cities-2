@@ -46,7 +46,7 @@ export class DefaultAuthService implements AuthService {
     if(!existsUser) {
       throw new UserError(
         StatusCodes.NOT_FOUND,
-        ErrorMessage.NO_FOUND_MESSAGE,
+        createMessage(ErrorMessage.NO_FOUND_MESSAGE, [dto.email]),
         DETAIL
       );
     }

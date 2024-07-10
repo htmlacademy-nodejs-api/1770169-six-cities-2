@@ -93,14 +93,26 @@ export class OfferController extends BaseController {
     });
   }
 
-  public async index({query}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async index({query, locals}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const offers = await this.offerService.find(Number(query.count));
-    this.ok(res, fillDto(OfferRdo, offers));
+
+    if (locals) {
+      this.ok(res, fillDto(OfferRdo, offers.map((offer) => (
+        offer.user.toString() !== locals.id ? {...offer, isFavorite: false} : offer
+      ))));
+      return;
+    }
+    this.ok(res, fillDto(OfferRdo, offers.map((offer) => ({...offer, isFavorite: false}))));
   }
 
-  public async show({params}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async show({params, locals}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const offer = await this.offerService.findById(params.offerId);
-    this.ok(res, fillDto(OfferExtendedRdo, offer));
+
+    if (locals) {
+      this.ok(res, fillDto(OfferExtendedRdo, offer?.user.toString() !== locals.id ? {...offer, isFavorite: false} : offer));
+      return;
+    }
+    this.ok(res, fillDto(OfferExtendedRdo, {...offer, isFavorite: false}));
   }
 
   public async create({body, locals}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
