@@ -10,11 +10,13 @@ import {Logger} from '../../libs/logger/index.js';
 import {UserService} from './user-service.interface.js';
 import {AuthUserRequest, UserRequest} from './types/user-request.type.js';
 import {Config, RestSchema} from '../../libs/config/index.js';
-import {createMessage, createSHA256, fillDto} from '../../helpers/index.js';
+import {createMessage, fillDto} from '../../helpers/index.js';
 import {UserRdo} from './rdo/user-rdo.js';
-import {HttpError} from '../../libs/rest/errors/index.js';
+import {UserError, HttpError} from '../../libs/rest/errors/index.js';
 import {DETAIL, ErrorMessage, InfoMessage} from './user.constant.js';
 import {UploadAvatarRdo} from './rdo/upload-avatar-rdo.js';
+import {AuthService} from '../auth/index.js';
+import {AuthorizedUserRdo} from '../auth/rdo/authorized-user.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -22,6 +24,7 @@ export class UserController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.Config) protected readonly config: Config<RestSchema>,
     @inject(Component.UserService) private readonly userService: UserService,
+    @inject(Component.AuthService) private readonly authService: AuthService,
   ) {
     super(logger);
 
@@ -29,7 +32,6 @@ export class UserController extends BaseController {
     this.addRoute({path: '/sign-up', method: HttpMethod.Post, handler: this.create});
     this.addRoute({path: '/sign-in', method: HttpMethod.Post, handler: this.login});
     this.addRoute({path: '/sign-in', method: HttpMethod.Get, handler: this.check});
-    this.addRoute({path: '/sign-out', method: HttpMethod.Post, handler: this.logout});
     this.addRoute({
       path: '/:userId/upload',
       method: HttpMethod.Post,
@@ -52,21 +54,28 @@ export class UserController extends BaseController {
   }
 
   public async login({body}: AuthUserRequest, res: Response, _next: NextFunction): Promise<void> {
-    const user = await this.userService.findByEmail(body.email);
+    const user = await this.authService.verify(body);
+    const token = await this.authService.authenticate(user);
 
-    if (!user) {
-      throw new HttpError(StatusCodes.UNAUTHORIZED, createMessage(ErrorMessage.USER_NOT_FOUND_MESSAGE, [body.email]), DETAIL);
-    }
-
-    if (user.getPassword() !== createSHA256(body.password, this.config.get('SALT'))) {
-      throw new HttpError(StatusCodes.UNAUTHORIZED, createMessage(ErrorMessage.PASSWORD_MATCH_MESSAGE, [body.email]), DETAIL);
-    }
-    this.ok(res, {token: 'T2VyLm5lckBnbWFpbC5jb20'});
+    this.ok(res, {
+      token,
+      email: user.email
+    });
   }
 
-  public async check(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
+  public async check({locals}: Request, res: Response, _next: NextFunction): Promise<void> {
+    const user = await this.userService.findById(locals.id);
 
-  public async logout(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
+    if (!user) {
+      throw new UserError(
+        StatusCodes.UNAUTHORIZED,
+        ErrorMessage.UNAUTHORIZED_MESSAGE,
+        DETAIL
+      );
+    }
+
+    this.ok(res, fillDto(AuthorizedUserRdo, user));
+  }
 
   public async upload({params, file}: UserRequest, res: Response, _next: NextFunction): Promise<void> {
     const user = await this.userService.uploadAvatar(params.userId, {avatar: file?.filename});

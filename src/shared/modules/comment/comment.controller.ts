@@ -6,6 +6,7 @@ import {
   BaseController,
   DocumentExistsMiddleware,
   HttpMethod,
+  PrivateRouteMiddleware,
   ValidateDtoMiddleware,
   ValidateOjectIdMiddleware
 } from '../../libs/rest/index.js';
@@ -46,6 +47,7 @@ export class CommentController extends BaseController {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateOjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(CreateCommentDto),
         new DocumentExistsMiddleware({
@@ -62,8 +64,8 @@ export class CommentController extends BaseController {
     this.ok(res, fillDto(CommentRdo, comments));
   }
 
-  public async create({body, params}: CommentRequest, res: Response): Promise<void> {
-    const comment = await this.commentService.create({...body, offer: params.offerId, user: ''});
+  public async create({body, params, locals}: CommentRequest, res: Response): Promise<void> {
+    const comment = await this.commentService.create({...body, offer: params.offerId, user: locals.id});
     this.created(res, fillDto(CommentRdo, comment));
   }
 }
