@@ -6,6 +6,7 @@ import {
   BaseController,
   DocumentExistsMiddleware,
   HttpMethod,
+  PrivateRouteMiddleware,
   ValidateDtoMiddleware,
   ValidateOjectIdMiddleware
 } from '../../libs/rest/index.js';
@@ -51,6 +52,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateOfferDto),
         new DocumentExistsMiddleware({
           service: this.cityService,
@@ -64,6 +66,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateOjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new DocumentExistsMiddleware({
@@ -79,6 +82,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Delete,
       handler: this.delete,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateOjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware({
           service: this.offerService,
@@ -89,20 +93,32 @@ export class OfferController extends BaseController {
     });
   }
 
-  public async index({query}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async index({query, locals}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const offers = await this.offerService.find(Number(query.count));
-    this.ok(res, fillDto(OfferRdo, offers));
+
+    if (locals) {
+      this.ok(res, fillDto(OfferRdo, offers.map((offer) => (
+        offer.user.toString() !== locals.id ? {...offer, isFavorite: false} : offer
+      ))));
+      return;
+    }
+    this.ok(res, fillDto(OfferRdo, offers.map((offer) => ({...offer, isFavorite: false}))));
   }
 
-  public async show({params}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async show({params, locals}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const offer = await this.offerService.findById(params.offerId);
-    this.ok(res, fillDto(OfferExtendedRdo, offer));
+
+    if (locals) {
+      this.ok(res, fillDto(OfferExtendedRdo, offer?.user.toString() !== locals.id ? {...offer, isFavorite: false} : offer));
+      return;
+    }
+    this.ok(res, fillDto(OfferExtendedRdo, {...offer, isFavorite: false}));
   }
 
-  public async create({body}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
+  public async create({body, locals}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const city = await this.cityService.findByCityName(body.city);
     const location = await this.locationService.findOrCreate(body.location as Location);
-    const offer = await this.offerService.create({...body, city: city?.id, user: '667d452a24dde3e029b27198', location: location.id});
+    const offer = await this.offerService.create({...body, city: city?.id, user: locals.id, location: location.id});
     this.created(res, fillDto(OfferRdo, offer));
   }
 

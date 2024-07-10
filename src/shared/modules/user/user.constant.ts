@@ -21,6 +21,5 @@ export const InfoMessage = {
 
 export const ErrorMessage = {
   CREATE_USER_MESSAGE: 'The user with this email: \'%email%\' has already been registered.',
-  USER_NOT_FOUND_MESSAGE: 'The user with this email: \'%email%\' was not found.',
-  PASSWORD_MATCH_MESSAGE: 'The wrong password was entered.',
+  UNAUTHORIZED_MESSAGE: 'Unauthorized'
 };

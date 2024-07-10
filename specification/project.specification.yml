@@ -397,30 +397,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/AuthInfo"
         "401":
           description: Пользователь не авторизован
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotAuthError"
-  /six-cities/user/sign-out:
-    post:
-      tags:
-        - user
-      summary: Выход из закрытой части приложения
-      description: Сервис предоставляет ресурс для завершения пользовательского сеанса.
-      parameters:
-        - name: X-Token
-          in: header
-          description: Авторизационный токен пользователя
-          required: true
-          schema:
-            type: string
-            example: T2VyLm5lckBnbWFpbC5jb20
-      responses:
-        "204":
-          description: Сеанс завершён
   /six-cities/comments/{offerId}:
     get:
       tags:
@@ -656,6 +639,9 @@ components:
         token:
           type: string
           example: T2VyLm5lckBnbWFpbC5jb20
+        email:
+          type: string
+          example: john@yahoo.com
     AuthError:
       type: object
       properties:

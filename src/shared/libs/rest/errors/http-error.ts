@@ -6,7 +6,6 @@ export class HttpError extends Error {
     super(message);
 
     this.httpStatusCode = httpStatusCode;
-    this.message = message;
     this.detail = detail;
   }
 }

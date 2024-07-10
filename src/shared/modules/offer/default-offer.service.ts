@@ -44,7 +44,7 @@ export class DefaultOfferService implements OfferService {
 
   public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
     const limit = Number.isNaN(count) ? MaxView.Offer : count as number;
-    console.log(limit);
+
     return await this.offerModel
       .aggregate([
         ...AGGREGATION_OPERATIONS.City,
