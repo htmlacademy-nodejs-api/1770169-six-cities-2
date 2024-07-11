@@ -20,6 +20,9 @@ export class RestApplication {
     @inject(Component.Config) private readonly config: Config<RestSchema>,
     @inject(Component.Database) private readonly databaseClient: DatabaseClient,
     @inject(Component.AppExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
+    @inject(Component.HttpExceptionFilter) private readonly httpExceptionFilter: ExceptionFilter,
+    @inject(Component.ValidationExceptionFilter) private readonly validationExceptionFilter: ExceptionFilter,
+    @inject(Component.UserExceptionFilter) private readonly userExceptionFilter: ExceptionFilter,
     @inject(Component.OfferController) private readonly offerController: Controller,
     @inject(Component.FavoriteOfferController) private readonly favoriteOfferController: Controller,
     @inject(Component.PremiumOfferController) private readonly premiumOfferController: Controller,
@@ -64,6 +67,9 @@ export class RestApplication {
 
   private async initExceptionFilters() {
     this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
+    this.server.use(this.httpExceptionFilter.catch.bind(this.httpExceptionFilter));
+    this.server.use(this.userExceptionFilter.catch.bind(this.userExceptionFilter));
+    this.server.use(this.validationExceptionFilter.catch.bind(this.validationExceptionFilter));
   }
 
   public async init() {

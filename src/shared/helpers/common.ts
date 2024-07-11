@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import {ClassConstructor, plainToInstance} from 'class-transformer';
 
 import {randomBytes} from 'node:crypto';
+import {ErrorType, ValidationErrorType} from '../libs/rest/index.js';
 
 export const getRandomNumber = (min: number, max: number, numAfterDigit = 0): number => +(Math.random() * (max - min) + min).toFixed(numAfterDigit);
 
@@ -42,9 +43,4 @@ export const createMessage = <T>(message: string, expressions: T[] = []): string
 
 export const fillDto = <T, K>(someDto: ClassConstructor<T>, plainObject: K) => plainToInstance(someDto, plainObject, {excludeExtraneousValues: true});
 
-export const createErrorObject = (message: string, type: string) => (
-  {
-    type,
-    error: message
-  }
-);
+export const createErrorObject = (errorType: ErrorType, error: string, details: ValidationErrorType[] = []) => ({errorType, error, details});

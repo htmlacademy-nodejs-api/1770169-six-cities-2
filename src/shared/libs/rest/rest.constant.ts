@@ -15,9 +15,3 @@ export enum Detail {
   ParseTokenMiddleware = 'ParseTokenMiddleware',
   PrivateRouteMiddleware = 'PrivateRouteMiddleware'
 }
-
-export enum ErrorType {
-  Client = 'CLIENT',
-  Server = 'SERVER',
-  Authorization = 'AUTHORIZATION',
-}

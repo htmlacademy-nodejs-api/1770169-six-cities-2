@@ -1,3 +1,6 @@
 export const InfoMessage = {
-  REGISTER_EXCEPTION_MESSAGE: 'Trying to connect to database...',
+  REGISTER_APP_EXCEPTION_MESSAGE: 'Register AppExceptionFilter',
+  REGISTER_HTTP_EXCEPTION_MESSAGE: 'Register HttpErrorExceptionFilter',
+  REGISTER_VALIDATION_EXCEPTION_MESSAGE: 'Register ValidationErrorExceptionFilter',
+  REGISTER_USER_EXCEPTION_MESSAGE: 'Register UserErrorExceptionFilter'
 };
