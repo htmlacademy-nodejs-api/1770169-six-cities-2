@@ -54,7 +54,7 @@ export class RestApplication {
     this.server.use(BaseRout.Comments, this.commentController.router);
     this.server.use(BaseRout.Offers, this.offerController.router);
     this.server.use(BaseRout.Favorites, this.favoriteOfferController.router);
-    this.server.use(BaseRout.Premiums, this.premiumOfferController.router);
+    this.server.use(BaseRout.Premium, this.premiumOfferController.router);
     this.server.use(BaseRout.User, this.userController.router);
   }
 

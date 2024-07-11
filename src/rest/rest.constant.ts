@@ -21,6 +21,6 @@ export enum BaseRout {
   Comments = '/six-cities/comments',
   Offers = '/six-cities/offers',
   Favorites = '/six-cities/favorites',
-  Premiums = '/six-cities/premiums',
+  Premium = '/six-cities/premium',
   User = '/six-cities/user'
 }

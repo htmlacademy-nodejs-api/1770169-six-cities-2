@@ -276,7 +276,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotFoundError"
-  /six-cities/premiums:
+  /six-cities/premium:
     get:
       tags:
         - premium
