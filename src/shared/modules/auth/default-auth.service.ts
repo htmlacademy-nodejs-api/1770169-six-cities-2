@@ -12,10 +12,10 @@ import {AuthService} from './auth-service.interface.js';
 import {LoginUserDto} from './dto/login-user.dto.js';
 import {Logger} from '../../libs/logger/index.js';
 import {TokenPayload} from './types/token-payload.type.js';
-import {CRYPTO_ALGORITHM, DETAIL, ErrorMessage, EXPIRED_TIME, InfoMessage} from './auth.constant.js';
+import {CRYPTO_ALGORITHM, ErrorMessage, EXPIRED_TIME, InfoMessage} from './auth.constant.js';
 import {Config, RestSchema} from '../../libs/config/index.js';
 import {createMessage} from './../../helpers/index.js';
-import {UserError} from '../../libs/rest/errors/user-error.js';
+import {HttpError} from '../../libs/rest/errors/index.js';
 
 @injectable()
 export class DefaultAuthService implements AuthService {
@@ -44,18 +44,16 @@ export class DefaultAuthService implements AuthService {
     const existsUser = await this.userService.findByEmail(dto.email);
 
     if(!existsUser) {
-      throw new UserError(
+      throw new HttpError(
         StatusCodes.NOT_FOUND,
-        createMessage(ErrorMessage.NO_FOUND_MESSAGE, [dto.email]),
-        DETAIL
+        createMessage(ErrorMessage.NO_FOUND_MESSAGE, [dto.email])
       );
     }
 
     if(!existsUser.verifyPassword(dto.password, this.config.get('SALT'))) {
-      throw new UserError(
+      throw new HttpError(
         StatusCodes.UNAUTHORIZED,
-        ErrorMessage.INCORRECT_MESSAGE,
-        DETAIL
+        ErrorMessage.INCORRECT_MESSAGE
       );
     }
 

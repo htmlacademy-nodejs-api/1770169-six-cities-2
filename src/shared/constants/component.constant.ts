@@ -21,6 +21,6 @@ export const Component = {
   AppExceptionFilter: Symbol.for('AppExceptionFilter'),
   HttpExceptionFilter: Symbol.for('HttpExceptionFilter'),
   ValidationExceptionFilter: Symbol.for('ValidationExceptionFilter'),
-  UserExceptionFilter: Symbol.for('UserExceptionFilter'),
-  AuthService: Symbol.for('AuthService')
+  AuthService: Symbol.for('AuthService'),
+  PathTransformer: Symbol.for('PathTransformer')
 } as const;

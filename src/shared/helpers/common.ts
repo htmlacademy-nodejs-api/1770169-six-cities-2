@@ -2,6 +2,8 @@ import dayjs from 'dayjs';
 
 import {ClassConstructor, plainToInstance} from 'class-transformer';
 
+import {ValidationError} from 'class-validator';
+
 import {randomBytes} from 'node:crypto';
 import {ErrorType, ValidationErrorType} from '../libs/rest/index.js';
 
@@ -43,4 +45,12 @@ export const createMessage = <T>(message: string, expressions: T[] = []): string
 
 export const fillDto = <T, K>(someDto: ClassConstructor<T>, plainObject: K) => plainToInstance(someDto, plainObject, {excludeExtraneousValues: true});
 
-export const createErrorObject = (errorType: ErrorType, error: string, details: ValidationErrorType[] = []) => ({errorType, error, details});
+export const createErrorObject = (errorType: ErrorType, error: string, details: ValidationErrorType[] = []) => (
+  {errorType, error, details}
+);
+
+export const transformValidationError = (errors: ValidationError[]): ValidationErrorType[] => errors.map(({property, value, constraints}) => (
+  {property, value, messages: constraints ? Object.values(constraints) : []}
+));
+
+export const getFullServerHost = (host: string, port: string) => `http://${host}:${port}`;

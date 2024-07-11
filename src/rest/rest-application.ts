@@ -1,3 +1,5 @@
+import cors from 'cors';
+
 import express, {Express} from 'express';
 
 import {inject, injectable} from 'inversify';
@@ -6,8 +8,8 @@ import 'reflect-metadata';
 import {Component} from '../shared/constants/index.js';
 import {Config, RestSchema} from '../shared/libs/config/index.js';
 import {Logger} from '../shared/libs/logger/index.js';
-import {getMongoURI, createMessage} from '../shared/helpers/index.js';
-import {InfoMessage} from './rest.constant.js';
+import {getMongoURI, getFullServerHost, createMessage} from '../shared/helpers/index.js';
+import {BaseRout, Directory, InfoMessage} from './rest.constant.js';
 import {DatabaseClient} from '../shared/libs/database-client/index.js';
 import {Controller, ExceptionFilter, ParseTokenMiddleware} from '../shared/libs/rest/index.js';
 
@@ -22,7 +24,6 @@ export class RestApplication {
     @inject(Component.AppExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
     @inject(Component.HttpExceptionFilter) private readonly httpExceptionFilter: ExceptionFilter,
     @inject(Component.ValidationExceptionFilter) private readonly validationExceptionFilter: ExceptionFilter,
-    @inject(Component.UserExceptionFilter) private readonly userExceptionFilter: ExceptionFilter,
     @inject(Component.OfferController) private readonly offerController: Controller,
     @inject(Component.FavoriteOfferController) private readonly favoriteOfferController: Controller,
     @inject(Component.PremiumOfferController) private readonly premiumOfferController: Controller,
@@ -50,25 +51,26 @@ export class RestApplication {
   }
 
   private async initControllers() {
-    this.server.use('/six-cities/comments', this.commentController.router);
-    this.server.use('/six-cities/offers', this.offerController.router);
-    this.server.use('/six-cities/favorite', this.favoriteOfferController.router);
-    this.server.use('/six-cities/premium', this.premiumOfferController.router);
-    this.server.use('/six-cities/user', this.userController.router);
+    this.server.use(BaseRout.Comments, this.commentController.router);
+    this.server.use(BaseRout.Offers, this.offerController.router);
+    this.server.use(BaseRout.Favorites, this.favoriteOfferController.router);
+    this.server.use(BaseRout.Premiums, this.premiumOfferController.router);
+    this.server.use(BaseRout.User, this.userController.router);
   }
 
   private async initMiddlewares() {
     const authenticateMiddleware = new ParseTokenMiddleware(this.config.get('JWT_SECRET'));
 
     this.server.use(express.json());
-    this.server.use('./upload', express.static(this.config.get('UPLOAD_DIRECTORY')));
+    this.server.use(cors());
+    this.server.use(Directory.Upload, express.static(this.config.get('UPLOAD_DIRECTORY')));
+    this.server.use(Directory.Static, express.static(this.config.get('STATIC_DIRECTORY')));
     this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
   }
 
   private async initExceptionFilters() {
     this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
     this.server.use(this.httpExceptionFilter.catch.bind(this.httpExceptionFilter));
-    this.server.use(this.userExceptionFilter.catch.bind(this.userExceptionFilter));
     this.server.use(this.validationExceptionFilter.catch.bind(this.validationExceptionFilter));
   }
 
@@ -93,6 +95,9 @@ export class RestApplication {
 
     this.logger.info(InfoMessage.SERVER_INIT_MESSAGE);
     await this.initServer();
-    this.logger.info(createMessage(InfoMessage.SERVER_INIT_COMPLETED_MESSAGE, [this.config.get('PORT')]));
+    this.logger.info(createMessage(
+      InfoMessage.SERVER_INIT_COMPLETED_MESSAGE,
+      [getFullServerHost(this.config.get('HOST'), this.config.get('PORT'))]
+    ));
   }
 }
