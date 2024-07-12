@@ -15,7 +15,7 @@ import {TokenPayload} from './types/token-payload.type.js';
 import {CRYPTO_ALGORITHM, ErrorMessage, EXPIRED_TIME, InfoMessage} from './auth.constant.js';
 import {Config, RestSchema} from '../../libs/config/index.js';
 import {createMessage} from './../../helpers/index.js';
-import {HttpError} from '../../libs/rest/errors/index.js';
+import {HttpError} from '../../libs/rest/index.js';
 
 @injectable()
 export class DefaultAuthService implements AuthService {

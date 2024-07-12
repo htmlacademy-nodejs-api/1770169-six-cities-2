@@ -3,7 +3,7 @@ import {Request, Response, NextFunction} from 'express';
 import {inject, injectable} from 'inversify';
 
 import {ExceptionFilter} from './exception-filter.interface.js';
-import {HttpError} from '../errors/index.js';
+import {HttpError} from '../errors/http-error.js';
 import {Component} from '../../../constants/index.js';
 import {Logger} from './../../logger/index.js';
 import {createErrorObject} from '../../../helpers/index.js';

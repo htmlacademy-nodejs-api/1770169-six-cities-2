@@ -5,7 +5,7 @@ import {StatusCodes} from 'http-status-codes';
 import {isValidObjectId} from 'mongoose';
 
 import {Middleware} from './middleware.interface.js';
-import {HttpError} from '../errors/index.js';
+import {HttpError} from '../errors/http-error.js';
 import {createMessage} from '../../../helpers/index.js';
 import {Detail, ErrorMessage} from '../rest.constant.js';
 

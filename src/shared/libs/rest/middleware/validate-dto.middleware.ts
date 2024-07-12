@@ -8,7 +8,7 @@ import {StatusCodes} from 'http-status-codes';
 
 import {Middleware} from './middleware.interface.js';
 import {createMessage, transformValidationError} from '../../../helpers/index.js';
-import {ValidationError} from '../errors/index.js';
+import {ValidationError} from '../errors/validation-error.js';
 import {ErrorMessage} from '../rest.constant.js';
 
 export class ValidateDtoMiddleware implements Middleware {

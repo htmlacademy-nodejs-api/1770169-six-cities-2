@@ -39,6 +39,11 @@ export enum Price {
   Max = 100000
 }
 
+export enum Route {
+  Root = '/',
+  OfferId = '/:offerId'
+}
+
 export const InfoMessage = {
   CREATE_OFFER_MESSAGE: 'New \'%offerName%\' offer has been successfully created.',
   UPDATE_OFFER_MESSAGE: 'The \'%offerName%\' offer has been successfully updated.',

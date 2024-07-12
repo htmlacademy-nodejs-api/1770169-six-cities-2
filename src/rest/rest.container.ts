@@ -5,9 +5,13 @@ import {RestApplication} from './index.js';
 import {PinoLogger} from '../shared/libs/logger/index.js';
 import {RestConfig} from '../shared/libs/config/index.js';
 import {DatabaseClient, MongoDatabaseClient} from '../shared/libs/database-client/index.js';
-import {AppExceptionFilter, ExceptionFilter, PathTransformer} from '../shared/libs/rest/index.js';
-import {HttpExceptionFilter} from '../shared/libs/rest/index.js';
-import {ValidationExceptionFilter} from '../shared/libs/rest/index.js';
+import {
+  AppExceptionFilter,
+  ExceptionFilter,
+  HttpExceptionFilter,
+  PathTransformer,
+  ValidationExceptionFilter
+} from '../shared/libs/rest/index.js';
 
 export function createRestApplicationContainer() {
   const container = new Container();

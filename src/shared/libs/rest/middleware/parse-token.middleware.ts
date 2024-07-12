@@ -8,7 +8,7 @@ import {createSecretKey} from 'node:crypto';
 
 import {Middleware} from './middleware.interface.js';
 import {ENCODING} from '../../../constants/index.js';
-import {HttpError} from '../errors/index.js';
+import {HttpError} from '../errors/http-error.js';
 import {TokenPayload} from '../../../modules/auth/index.js';
 import {Detail, ErrorMessage} from '../rest.constant.js';
 

@@ -47,12 +47,12 @@ export class PathTransformer {
           const port = this.config.get('PORT');
 
           if(this.isProperty(key) && typeof value === 'string') {
-            const rootPath = this.hasDefaultImage(value) ? Directory.Static : Directory.Upload;
-            current[key] = `${getFullServerHost(host, port)}${rootPath}/${value}`;
+            const basePath = this.hasDefaultImage(value) ? Directory.Static : Directory.Upload;
+            current[key] = `${getFullServerHost(host, port)}${basePath}/${value}`;
           } else if(this.isProperty(key) && Array.isArray(value)) {
             current[key] = value.map((item) => {
-              const rootPath = this.hasDefaultImage(item) ? Directory.Static : Directory.Upload;
-              return `${getFullServerHost(host, port)}${rootPath}/${item}`;
+              const basePath = this.hasDefaultImage(item) ? Directory.Static : Directory.Upload;
+              return `${getFullServerHost(host, port)}${basePath}/${item}`;
             });
           }
         }

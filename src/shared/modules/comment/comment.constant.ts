@@ -16,3 +16,7 @@ export enum Rating {
   Min = 1,
   Max = 5
 }
+
+export enum Route {
+  OfferId = '/:offerId',
+}

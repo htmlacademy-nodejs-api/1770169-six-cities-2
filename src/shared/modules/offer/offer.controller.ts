@@ -20,7 +20,7 @@ import {CityService} from '../city/index.js';
 import {LocationService} from '../location/index.js';
 import {Location} from '../../types/index.js';
 import {OfferExtendedRdo} from './rdo/offer-extended-rdo.js';
-import {InfoMessage} from './offer.constant.js';
+import {InfoMessage, Route} from './offer.constant.js';
 import {CommentService} from './../comment/index.js';
 import {CreateOfferDto} from './dto/create-offer.dto.js';
 import {UpdateOfferDto} from './dto/update-offer.dto.js';
@@ -37,18 +37,26 @@ export class OfferController extends BaseController {
     super(logger);
 
     this.logger.info(InfoMessage.REGISTER_OFFER_ROUTES_MESSAGE);
-    this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
     this.addRoute({
-      path: '/:offerId',
+      path: Route.Root,
+      method: HttpMethod.Get,
+      handler: this.index
+    });
+    this.addRoute({
+      path: Route.OfferId,
       method: HttpMethod.Get,
       handler: this.show,
       middlewares: [
         new ValidateOjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware({service: this.offerService, entityName: 'Offer', paramName: 'offerId'})
+        new DocumentExistsMiddleware({
+          service: this.offerService,
+          entityName: 'Offer',
+          paramName: 'offerId'
+        })
       ]
     });
     this.addRoute({
-      path: '/',
+      path: Route.Root,
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
@@ -62,7 +70,7 @@ export class OfferController extends BaseController {
       ]
     });
     this.addRoute({
-      path: '/:offerId',
+      path: Route.OfferId,
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
@@ -78,7 +86,7 @@ export class OfferController extends BaseController {
       ]
     });
     this.addRoute({
-      path: '/:offerId',
+      path: Route.OfferId,
       method: HttpMethod.Delete,
       handler: this.delete,
       middlewares: [
