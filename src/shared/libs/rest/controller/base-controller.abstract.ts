@@ -2,7 +2,7 @@ import {Router, Response} from 'express';
 
 import asyncHandler from 'express-async-handler';
 
-import {injectable} from 'inversify';
+import {inject, injectable} from 'inversify';
 
 import {StatusCodes} from 'http-status-codes';
 
@@ -11,18 +11,21 @@ import {Route} from '../types/route.interface.js';
 import {Controller} from './controller.interface.js';
 import {createMessage} from '../../../helpers/index.js';
 import {InfoMessage} from '../rest.constant.js';
+import {Component} from '../../../constants/index.js';
+import {PathTransformer} from '../transform/path-transformer.js';
 
 @injectable()
 export abstract class BaseController implements Controller {
   readonly router: Router;
+  @inject(Component.PathTransformer) private pathTransformer: PathTransformer;
 
   constructor(
-    protected readonly logger: Logger
+    protected readonly logger: Logger,
   ) {
     this.router = Router();
   }
 
-  get () {
+  get() {
     return this.router;
   }
 
@@ -36,10 +39,11 @@ export abstract class BaseController implements Controller {
   }
 
   public send<T>(res: Response, statusCode: number, data: T): void {
+    const transformedData = this.pathTransformer.execute(data as Record<string, unknown>);
     res
       .type('application/json')
       .status(statusCode)
-      .json(data);
+      .json(transformedData);
   }
 
   public ok<T>(res: Response, data: T): void {

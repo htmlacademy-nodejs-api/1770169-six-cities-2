@@ -3,13 +3,12 @@ import chalk from 'chalk';
 import {TsvFileReader} from '../../shared/libs/file-reader/index.js';
 import {CommandName, ErrorMessage, ImportOption, InfoMessage} from './command.constant.js';
 import {Command} from './command.interface.js';
-import {createCity, createMessage, createOffer, getErrorMessage} from '../../shared/helpers/index.js';
+import {createCity, createMessage, createOffer, getErrorMessage, getMongoURI} from '../../shared/helpers/index.js';
 import {DefaultUserService, UserModel, UserService} from '../../shared/modules/user/index.js';
 import {DefaultOfferService, OfferModel, OfferService} from '../../shared/modules/offer/index.js';
 import {DatabaseClient, MongoDatabaseClient} from '../../shared/libs/database-client/index.js';
 import {Logger, PinoLogger} from '../../shared/libs/logger/index.js';
 import {City, Offer} from '../../shared/types/index.js';
-import {getMongoURI} from '../../shared/helpers/index.js';
 import {DefaultLocationService, LocationModel, LocationService} from '../../shared/modules/location/index.js';
 import {CityModel, CityService, DefaultCityService} from '../../shared/modules/city/index.js';
 

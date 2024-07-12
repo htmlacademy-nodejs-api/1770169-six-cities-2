@@ -201,7 +201,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotFoundError"
-  /six-cities/favorite:
+  /six-cities/favorites:
     get:
       tags:
         - favorite
@@ -231,7 +231,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthError"
-  /six-cities/favorite/{offerId}/{status}:
+  /six-cities/favorites/{offerId}/{status}:
     patch:
       tags:
         - favorite

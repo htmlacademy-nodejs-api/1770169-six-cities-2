@@ -16,7 +16,7 @@ import {CommentService} from './comment-service.interface.js';
 import {fillDto} from '../../helpers/index.js';
 import {CommentRdo} from './rdo/comment.rdo.js';
 import {CommentRequest} from './types/comment-request.type.js';
-import {InfoMessage} from './comment.constant.js';
+import {InfoMessage, Route} from './comment.constant.js';
 import {CreateCommentDto} from './dto/create-comment.dto.js';
 import {OfferService} from '../offer/index.js';
 
@@ -31,7 +31,7 @@ export class CommentController extends BaseController {
 
     this.logger.info(InfoMessage.REGISTER_ROUTES_MESSAGE);
     this.addRoute({
-      path: '/:offerId',
+      path: Route.OfferId,
       method: HttpMethod.Get,
       handler: this.index,
       middlewares: [
@@ -43,7 +43,7 @@ export class CommentController extends BaseController {
         })
       ]});
     this.addRoute({
-      path: '/:offerId',
+      path: Route.OfferId,
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [

@@ -3,7 +3,7 @@ import {Request, Response, NextFunction} from 'express';
 import {StatusCodes} from 'http-status-codes';
 
 import {Middleware} from './middleware.interface.js';
-import {HttpError} from '../errors/index.js';
+import {HttpError} from '../errors/http-error.js';
 import {Detail, ErrorMessage} from '../rest.constant.js';
 
 

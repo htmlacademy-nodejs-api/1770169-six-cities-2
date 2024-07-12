@@ -4,9 +4,9 @@ import {readdirSync} from 'node:fs';
 
 import chalk from 'chalk';
 
-import {CLIApplication} from './cli/cli-application.js';
-import {Command} from './cli/commands/command.interface.js';
-import {FILE_END_SUFFIXES, MODULES_PATH} from './cli/cli.constant.js';
+import {CLIApplication} from './cli/index.js';
+import {Command} from './cli/index.js';
+import {FILE_END_SUFFIXES, MODULES_PATH} from './cli/index.js';
 import {getErrorMessage} from './shared/helpers/index.js';
 
 async function importModules(directory: string) {

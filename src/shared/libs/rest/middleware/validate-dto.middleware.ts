@@ -7,24 +7,24 @@ import {validate} from 'class-validator';
 import {StatusCodes} from 'http-status-codes';
 
 import {Middleware} from './middleware.interface.js';
+import {createMessage, transformValidationError} from '../../../helpers/index.js';
+import {ValidationError} from '../errors/validation-error.js';
+import {ErrorMessage} from '../rest.constant.js';
 
 export class ValidateDtoMiddleware implements Middleware {
   constructor(
     private dto: ClassConstructor<object>
   ) {}
 
-  public async execute({body}: Request, res: Response, next: NextFunction): Promise<void> {
+  public async execute({body, path}: Request, _res: Response, next: NextFunction): Promise<void> {
     const errors = await validate(plainToInstance(this.dto, body));
 
     if (errors.length > 0) {
-      res.status(StatusCodes.BAD_REQUEST).send(errors.map((error) => (
-        {
-          field: error.property,
-          value: error.value,
-          message: error.constraints
-        }
-      )));
-      return;
+      throw new ValidationError(
+        StatusCodes.CONFLICT,
+        createMessage(ErrorMessage.VALIDATE_ERROR_MESSAGE, [path]),
+        transformValidationError(errors),
+      );
     }
 
     next();

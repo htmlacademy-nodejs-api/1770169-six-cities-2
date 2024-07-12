@@ -1,5 +1,4 @@
 export const DEFAULT_USER_AVATAR = 'default-avatar.png';
-export const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
 export const AVATAR_EXTENSION_REGEX = /([^\s]+(\.(jpg|png))$)/;
 export const COLLECTION_NAME = 'user';
 export const DETAIL = 'UserController';
@@ -12,6 +11,12 @@ export enum Password {
 export enum UserName {
   Min = 1,
   Max = 15
+}
+
+export enum Route {
+  Registration = '/sign-up',
+  Authentication = '/sign-in',
+  Upload = '/:userId/upload'
 }
 
 export const InfoMessage = {

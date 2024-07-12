@@ -9,5 +9,18 @@ export const InfoMessage = {
   CONTROLLERS_INIT_MESSAGE: 'Initializing the controllers...',
   CONTROLLERS_INIT_COMPLETED_MESSAGE: 'The controllers is initialized.',
   SERVER_INIT_MESSAGE: 'Initializing the server...',
-  SERVER_INIT_COMPLETED_MESSAGE: 'The server is initialized, server running on port: %port%.'
+  SERVER_INIT_COMPLETED_MESSAGE: 'The server is initialized, server running at: %host%.'
 };
+
+export enum Directory {
+  Upload = '/upload',
+  Static = '/static'
+}
+
+export enum BaseRout {
+  Comments = '/six-cities/comments',
+  Offers = '/six-cities/offers',
+  Favorites = '/six-cities/favorites',
+  Premium = '/six-cities/premium',
+  User = '/six-cities/user'
+}
