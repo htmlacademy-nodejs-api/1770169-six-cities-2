@@ -9,13 +9,13 @@ import {createSecretKey} from 'node:crypto';
 import {Component, ENCODING} from './../../constants/index.js';
 import {DefaultUserService, UserEntity} from '../user/index.js';
 import {AuthService} from './auth-service.interface.js';
-import {LoginUserDto} from './dto/login-user.dto.js';
 import {Logger} from '../../libs/logger/index.js';
 import {TokenPayload} from './types/token-payload.type.js';
 import {CRYPTO_ALGORITHM, ErrorMessage, EXPIRED_TIME, InfoMessage} from './auth.constant.js';
 import {Config, RestSchema} from '../../libs/config/index.js';
 import {createMessage} from './../../helpers/index.js';
 import {HttpError} from '../../libs/rest/index.js';
+import {AuthUserDto} from '../user/dto/auth-user.dto.js';
 
 @injectable()
 export class DefaultAuthService implements AuthService {
@@ -40,7 +40,7 @@ export class DefaultAuthService implements AuthService {
       .sign(secretKey);
   }
 
-  public async verify(dto: LoginUserDto): Promise<UserEntity> {
+  public async verify(dto: AuthUserDto): Promise<UserEntity> {
     const existsUser = await this.userService.findByEmail(dto.email);
 
     if(!existsUser) {

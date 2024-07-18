@@ -77,12 +77,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FullOffer"
+        "400":
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
         "401":
           description: Пользователь не авторизован
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthError"
+                $ref: "#/components/schemas/AuthorizationError"
   /six-cities/offers/{offerId}:
     get:
       tags:
@@ -96,7 +102,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+            example: 667c673deb3171fbdaa4ce26
         - name: X-Token
           in: header
           description: Авторизационный токен пользователя
@@ -131,7 +137,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+            example: 667c673deb3171fbdaa4ce26
         - name: X-Token
           in: header
           description: Авторизационный токен пользователя
@@ -158,13 +164,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthError"
+                $ref: "#/components/schemas/AuthorizationError"
         "404":
           description: Предложение не найдено
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotFoundError"
+        "409":
+          description: Не владелец предложения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotOwnerError"
     delete:
       tags:
         - offers
@@ -178,7 +190,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+            example: 667c673deb3171fbdaa4ce26
         - name: X-Token
           in: header
           description: Авторизационный токен пользователя
@@ -194,13 +206,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthError"
+                $ref: "#/components/schemas/AuthorizationError"
         "404":
           description: Предложение не найдено
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotFoundError"
+        "409":
+          description: Не владелец предложения
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotOwnerError"
   /six-cities/favorites:
     get:
       tags:
@@ -230,13 +248,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthError"
-  /six-cities/favorites/{offerId}/{status}:
-    patch:
+                $ref: "#/components/schemas/AuthorizationError"
+  /six-cities/favorites/{offerId}:
+    post:
       tags:
         - favorite
-      summary: Добавление и удаление предложения в/из избранного
-      description: Сервис предоставляет ресурс для добавления и удаления любого предложения в/из списка избранных предложений с идентификатором `offerId`.
+      summary: Добавление предложения в избранное
+      description: Сервис предоставляет ресурс для добавления любого предложения в список избранных предложений с идентификатором `offerId`.
         Ресурс доступен только авторизованным клиентам.
       parameters:
         - name: offerId
@@ -245,15 +263,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 6af6f711-c28d-4121-82cd-e0b462a27f00
-        - name: status
-          in: path
-          description: Статус избранного предложения. Может быть `1` или `0`, где `1`
-            добавляет предложение в избранное, а `0` удаляет
-          required: true
-          schema:
-            type: number
-            example: 1
+            example: 667c673deb3171fbdaa4ce26
         - name: X-Token
           in: header
           description: Авторизационный токен пользователя
@@ -263,13 +273,49 @@ paths:
             example: T2VyLm5lckBnbWFpbC5jb20
       responses:
         "204":
-          description: Предложение добавлено или удалено в/из списка избранных предложений
+          description: Предложение добавлено в список избранных предложений
         "401":
             description: Пользователь не авторизован
             content:
               application/json:
                 schema:
-                  $ref: "#/components/schemas/AuthError"
+                  $ref: "#/components/schemas/AuthorizationError"
+        "404":
+          description: Предложение не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+    delete:
+      tags:
+        - favorite
+      summary: Удаление предложения из избранного
+      description: Сервис предоставляет ресурс для удаления любого предложения из списка избранных предложений с идентификатором `offerId`.
+        Ресурс доступен только авторизованным клиентам.
+      parameters:
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: string
+            example: 667c673deb3171fbdaa4ce26
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2VyLm5lckBnbWFpbC5jb20
+      responses:
+        "204":
+          description: Предложение удалено из списка избранных предложений
+        "401":
+            description: Пользователь не авторизован
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/AuthorizationError"
         "404":
           description: Предложение не найдено
           content:
@@ -319,14 +365,6 @@ paths:
       summary: Создание нового пользователя
       description: Сервис предоставляет ресурс для создания нового пользователя.
         В случае успешного создания пользователя сервис возвращает информацию о созданном пользователе.
-      parameters:
-        - name: X-Token
-          in: header
-          description: Авторизационный токен пользователя
-          required: false
-          schema:
-            type: string
-            example: T2VyLm5lckBnbWFpbC5jb20
       requestBody:
         description: Объект с новым пользователем
         required: true
@@ -335,12 +373,24 @@ paths:
             schema:
               $ref: "#/components/schemas/User"
       responses:
-        "200":
+        "201":
           description: Объект c созданным пользователем
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+        "400":
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+        "409":
+          description: Ошибка регистрации
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegistrationError"
   /six-cities/user/sign-in:
     post:
       tags:
@@ -349,14 +399,6 @@ paths:
       description: Сервис предоставляет ресурс для аутентификации и авторизации пользователя.
         Для входа в закрытую часть приложения клиент передаёт логин (email) и пароль пользователя.
         В случае успешной проверки логина и пароля сервис возвращает клиенту токен.
-      parameters:
-        - name: X-Token
-          in: header
-          description: Авторизационный токен пользователя
-          required: false
-          schema:
-            type: string
-            example: T2VyLm5lckBnbWFpbC5jb20
       requestBody:
         description: Объект с пользователем
         required: true
@@ -370,13 +412,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthInfo"
-        "401":
-          description: Пользователь не авторизован
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: john@yahoo.com
+                  token:
+                    type: string
+                    example: T2VyLm5lckBnbWFpbC5jb20
+        "400":
+          description: Ошибка валидации
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/NotAuthError"
+                $ref: "#/components/schemas/ValidationError"
+        "409":
+          description: Ошибка авторизации
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationError"
     get:
       tags:
         - user
@@ -397,13 +452,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthInfo"
+                $ref: "#/components/schemas/User"
         "401":
           description: Пользователь не авторизован
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/NotAuthError"
+                $ref: "#/components/schemas/AuthorizationError"
+  /six-cities/user/sign-out:
+    delete:
+      tags:
+        - user
+      summary: Завершить сеанс пользователя
+      description: Сервис предоставляет ресурс для выход из закрытой части приложения.
+      responses:
+        "204":
+          description: Сеанс завершён
   /six-cities/comments/{offerId}:
     get:
       tags:
@@ -427,6 +491,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Comment"
+        "401":
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthorizationError"
         "404":
           description: Предложение не найдено
           content:
@@ -462,6 +532,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Comment"
+        "401":
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthorizationError"
         "404":
           description: Предложение не найдено
           content:
@@ -488,14 +564,14 @@ components:
         id:
           type: string
           readOnly: true
-          example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+          example: 667c673deb3171fbdaa4ce26
         name:
           type: string
           example: John
         avatar:
           type: string
           example: default-avatar.png
-        type:
+        userType:
           type: string
           enum:
             - "regular"
@@ -531,7 +607,7 @@ components:
         id:
           type: string
           readOnly: true
-          example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+          example: 667c673deb3171fbdaa4ce26
         title:
           type: string
           example: Loft Studio in the Central Area
@@ -617,7 +693,7 @@ components:
         id:
           type: string
           readOnly: true
-          example: 6af6f711-c28d-4121-82cd-e0b462a27f00
+          example: 667c673deb3171fbdaa4ce26
         comment:
           type: string
           example: These top places to visit in Amsterdam
@@ -634,30 +710,82 @@ components:
       properties:
         user:
           $ref: "#/components/schemas/User"
-    AuthInfo:
-      properties:
-        token:
-          type: string
-          example: T2VyLm5lckBnbWFpbC5jb20
-        email:
-          type: string
-          example: john@yahoo.com
-    AuthError:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Access deny.
-    NotFoundError:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Offer with id 6af6f711-c28d-4121-82cd-e0b462a27f00 not found.
     NotAuthError:
       type: object
       properties:
         message:
           type: string
           example: Failed to sign in.
+    ValidationError:
+      type: object
+      properties:
+        errorType:
+          type: string
+          example: "VALIDATION_ERROR"
+        error:
+          type: string
+          example: "Validation error: /sign-up"
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              property:
+                type: string
+                example: "name"
+              value:
+                type: string
+                example: ""
+              message:
+                type: string
+                example: "Minimum name length must be 1"
+    CommonError:
+      type: object
+      properties:
+        errorType:
+          type: string
+          example: "COMMON_ERROR"
+        details:
+          type: array
+          default: []
+    RegistrationError:
+      allOf:
+        - $ref: "#/components/schemas/CommonError"
+        - type: object
+      properties:
+        error:
+          type: string
+          example: "The user with this email: 'john@yahoo.com' has already been registered."
+    AuthorizationError:
+      allOf:
+        - $ref: "#/components/schemas/CommonError"
+        - type: object
+      properties:
+        error:
+          type: string
+          example: "Unauthorized"
+    AuthenticationError:
+      allOf:
+        - $ref: "#/components/schemas/CommonError"
+        - type: object
+      properties:
+        error:
+          type: string
+          example: "The wrong password was entered."
+    NotFoundError:
+      allOf:
+          - $ref: "#/components/schemas/CommonError"
+          - type: object
+      properties:
+        error:
+          type: string
+          example: "Offer with 667c673deb3171fbdaa4ce26 not found in the database."
+    NotOwnerError:
+      allOf:
+          - $ref: "#/components/schemas/CommonError"
+          - type: object
+      properties:
+        error:
+          type: string
+          example: "You are not the owner of this offer."
 

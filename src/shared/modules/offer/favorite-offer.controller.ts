@@ -10,7 +10,7 @@ import {
   ValidateDtoMiddleware,
   ValidateOjectIdMiddleware
 } from '../../libs/rest/index.js';
-import {Component, RADIX} from '../../constants/index.js';
+import {Component} from '../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {OfferService} from './offer-service.interface.js';
 import {fillDto} from '../../helpers/index.js';
@@ -38,8 +38,23 @@ export class FavoriteOfferController extends BaseController {
     });
     this.addRoute({
       path: '/:offerId',
-      method: HttpMethod.Patch,
-      handler: this.update,
+      method: HttpMethod.Post,
+      handler: this.add,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateOjectIdMiddleware('offerId'),
+        new ValidateDtoMiddleware(UpdateOfferDto),
+        new DocumentExistsMiddleware({
+          service: this.offerService,
+          entityName: 'Offer',
+          paramName: 'offerId'
+        })
+      ]
+    });
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.delete,
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateOjectIdMiddleware('offerId'),
@@ -58,8 +73,13 @@ export class FavoriteOfferController extends BaseController {
     this.ok(res, fillDto(OfferRdo, offers));
   }
 
-  public async update({params, query}: UpdateOfferRequest, res: Response, _next: NextFunction): Promise<void> {
-    await this.offerService.addOrRemoveFavorite(params.offerId, {isFavorite: !!parseInt(query.status as string, RADIX)});
+  public async add({params}: UpdateOfferRequest, res: Response, _next: NextFunction): Promise<void> {
+    await this.offerService.addOrRemoveFavorite(params.offerId, {isFavorite: true});
+    this.noContent(res, null);
+  }
+
+  public async delete({params}: UpdateOfferRequest, res: Response, _next: NextFunction): Promise<void> {
+    await this.offerService.addOrRemoveFavorite(params.offerId, {isFavorite: false});
     this.noContent(res, null);
   }
 }

@@ -16,6 +16,7 @@ export enum UserName {
 export enum Route {
   Registration = '/sign-up',
   Authentication = '/sign-in',
+  Logout = '/sign-out',
   Upload = '/:userId/upload'
 }
 

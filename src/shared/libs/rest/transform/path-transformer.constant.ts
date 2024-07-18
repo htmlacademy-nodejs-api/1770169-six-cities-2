@@ -1,11 +1,9 @@
 export const DEFAULT_IMAGES = [
-  'default-avatar.png',
+  'default-avatar.png'
 ];
 
 export const FIELDS = [
-  'avatar',
-  'previewImage',
-  'images'
+  'avatar'
 ];
 
 export const InfoMessage = {

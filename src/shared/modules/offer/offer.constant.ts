@@ -122,6 +122,7 @@ export const AGGREGATION_OPERATIONS = {
         'city.location': '$cityLocation',
         rating: { $ifNull: [{ $round: [{ $avg: '$comments.rating' }, 1] }, 0] },
         commentsCount: { $size: '$comments' },
+        id: {$toString: '$_id'}
       }
     },
     { $unset: 'comments' },

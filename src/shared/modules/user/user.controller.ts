@@ -9,7 +9,8 @@ import {
   DocumentExistsMiddleware,
   HttpMethod,
   HttpError,
-  UploadFileMiddleware
+  UploadFileMiddleware,
+  ValidateDtoMiddleware
 } from '../../libs/rest/index.js';
 import {Component} from './../../constants/index.js';
 import {Logger} from '../../libs/logger/index.js';
@@ -21,7 +22,8 @@ import {UserRdo} from './rdo/user-rdo.js';
 import {DETAIL, ErrorMessage, InfoMessage, Route} from './user.constant.js';
 import {UploadAvatarRdo} from './rdo/upload-avatar-rdo.js';
 import {AuthService} from '../auth/index.js';
-import {AuthorizedUserRdo} from '../auth/rdo/authorized-user.rdo.js';
+import {CreateUserDto} from './dto/create-user.dto.js';
+import {AuthUserDto} from './dto/auth-user.dto.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -34,9 +36,30 @@ export class UserController extends BaseController {
     super(logger);
 
     this.logger.info(InfoMessage.REGISTER_ROUTES_MESSAGE);
-    this.addRoute({path: Route.Registration, method: HttpMethod.Post, handler: this.create});
-    this.addRoute({path: Route.Authentication, method: HttpMethod.Post, handler: this.login});
-    this.addRoute({path: Route.Authentication, method: HttpMethod.Get, handler: this.check});
+    this.addRoute({
+      path: Route.Registration,
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [
+        new ValidateDtoMiddleware(CreateUserDto)
+      ]
+    });
+    this.addRoute({
+      path: Route.Authentication,
+      method: HttpMethod.Post,
+      handler: this.login,
+      middlewares: [
+        new ValidateDtoMiddleware(AuthUserDto)
+      ]
+    });
+    this.addRoute({
+      path: Route.Authentication,
+      method: HttpMethod.Get,
+      handler: this.check,
+      middlewares: [
+        new ValidateDtoMiddleware(AuthUserDto)
+      ]
+    });
     this.addRoute({
       path: Route.Upload,
       method: HttpMethod.Post,
@@ -46,6 +69,7 @@ export class UserController extends BaseController {
         new UploadFileMiddleware(config.get('UPLOAD_DIRECTORY'), 'avatar')
       ]
     });
+    this.addRoute({path: Route.Logout, method: HttpMethod.Delete, handler: this.logout});
   }
 
   public async create({body}: UserRequest, res: Response, _next: NextFunction): Promise<void> {
@@ -82,11 +106,15 @@ export class UserController extends BaseController {
       );
     }
 
-    this.ok(res, fillDto(AuthorizedUserRdo, user));
+    this.ok(res, fillDto(UserRdo, user));
   }
 
   public async upload({params, file}: UserRequest, res: Response, _next: NextFunction): Promise<void> {
     const user = await this.userService.uploadAvatar(params.userId, {avatar: file?.filename});
     this.created(res, fillDto(UploadAvatarRdo, user));
+  }
+
+  public async logout(_req: Request, res: Response, _next: NextFunction): Promise<void> {
+    this.noContent(res, {});
   }
 }

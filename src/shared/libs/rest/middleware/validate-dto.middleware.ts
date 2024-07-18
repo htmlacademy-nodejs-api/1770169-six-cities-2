@@ -21,7 +21,7 @@ export class ValidateDtoMiddleware implements Middleware {
 
     if (errors.length > 0) {
       throw new ValidationError(
-        StatusCodes.CONFLICT,
+        StatusCodes.BAD_REQUEST,
         createMessage(ErrorMessage.VALIDATE_ERROR_MESSAGE, [path]),
         transformValidationError(errors),
       );

@@ -5,6 +5,7 @@ import {inject, injectable} from 'inversify';
 import {
   BaseController,
   DocumentExistsMiddleware,
+  DocumentOwnerMiddleware,
   HttpMethod,
   PrivateRouteMiddleware,
   ValidateDtoMiddleware,
@@ -61,12 +62,7 @@ export class OfferController extends BaseController {
       handler: this.create,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateDtoMiddleware(CreateOfferDto),
-        new DocumentExistsMiddleware({
-          service: this.cityService,
-          entityName: 'City',
-          bodyField: 'city'
-        })
+        new ValidateDtoMiddleware(CreateOfferDto)
       ]
     });
     this.addRoute({
@@ -77,11 +73,11 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateOjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
+        new DocumentOwnerMiddleware(this.offerService, 'Offer'),
         new DocumentExistsMiddleware({
           service: this.offerService,
           entityName: 'Offer',
-          paramName: 'offerId',
-          bodyField: 'city'
+          paramName: 'offerId'
         })
       ]
     });
@@ -92,6 +88,7 @@ export class OfferController extends BaseController {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateOjectIdMiddleware('offerId'),
+        new DocumentOwnerMiddleware(this.offerService, 'Offer'),
         new DocumentExistsMiddleware({
           service: this.offerService,
           entityName: 'Offer',
@@ -124,18 +121,21 @@ export class OfferController extends BaseController {
   }
 
   public async create({body, locals}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {
-    const city = await this.cityService.findByCityName(body.city);
+    const cityLocation = await this.locationService.findOrCreate(body.city.location);
+    const city = await this.cityService.findOrCreate({name: body.city.name, location: cityLocation.id});
     const location = await this.locationService.findOrCreate(body.location as Location);
-    const offer = await this.offerService.create({...body, city: city?.id, user: locals.id, location: location.id});
-    this.created(res, fillDto(OfferRdo, offer));
+    const offer = await this.offerService.create({...body, city: city.id, user: locals.id, location: location.id});
+    const foundOffer = await this.offerService.findById(offer.id);
+    this.created(res, fillDto(OfferExtendedRdo, foundOffer));
   }
 
   public async update({body, params}: UpdateOfferRequest, res: Response, _next: NextFunction): Promise<void> {
     const update = {...body};
 
     if (body.city) {
-      const city = await this.cityService.findByCityName(body.city);
-      update.city = city?.id;
+      const cityLocation = await this.locationService.findOrCreate(body.city.location);
+      const city = await this.cityService.findOrCreate({name: body.city.name, location: cityLocation.id});
+      update.city = city.id;
     }
 
     if (body.location) {
@@ -144,7 +144,8 @@ export class OfferController extends BaseController {
       update.location = location?.id;
     }
     const offer = await this.offerService.updateById(params.offerId, update);
-    this.ok(res, fillDto(OfferRdo, offer));
+    const foundOffer = await this.offerService.findById(offer?.id);
+    this.ok(res, fillDto(OfferExtendedRdo, foundOffer));
   }
 
   public async delete({params}: OfferRequest, res: Response, _next: NextFunction): Promise<void> {

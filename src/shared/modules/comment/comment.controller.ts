@@ -66,6 +66,7 @@ export class CommentController extends BaseController {
 
   public async create({body, params, locals}: CommentRequest, res: Response): Promise<void> {
     const comment = await this.commentService.create({...body, offer: params.offerId, user: locals.id});
-    this.created(res, fillDto(CommentRdo, comment));
+    const foundComment = await this.commentService.findById(comment.id);
+    this.created(res, fillDto(CommentRdo, foundComment));
   }
 }

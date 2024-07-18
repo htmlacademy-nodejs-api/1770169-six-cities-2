@@ -50,7 +50,7 @@ export class RestApplication {
   }
 
   private async initControllers() {
-    this.server.use(BaseRout.Comments, this.commentController.router);
+    this.server.use(BaseRout.Offers, this.commentController.router);
     this.server.use(BaseRout.Offers, this.offerController.router);
     this.server.use(BaseRout.Favorites, this.favoriteOfferController.router);
     this.server.use(BaseRout.Premium, this.premiumOfferController.router);
@@ -68,9 +68,9 @@ export class RestApplication {
   }
 
   private async initExceptionFilters() {
-    this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
-    this.server.use(this.httpExceptionFilter.catch.bind(this.httpExceptionFilter));
     this.server.use(this.validationExceptionFilter.catch.bind(this.validationExceptionFilter));
+    this.server.use(this.httpExceptionFilter.catch.bind(this.httpExceptionFilter));
+    this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
   }
 
   public async init() {
@@ -84,13 +84,13 @@ export class RestApplication {
     await this.initMiddlewares();
     this.logger.info(InfoMessage.MIDDLEWARES_INIT_COMPLETED_MESSAGE);
 
-    this.logger.info(InfoMessage.EXCEPTIONS_INIT_MESSAGE);
-    await this.initExceptionFilters();
-    this.logger.info(InfoMessage.EXCEPTIONS_INIT_COMPLETED_MESSAGE);
-
     this.logger.info(InfoMessage.CONTROLLERS_INIT_MESSAGE);
     await this.initControllers();
     this.logger.info(InfoMessage.CONTROLLERS_INIT_COMPLETED_MESSAGE);
+
+    this.logger.info(InfoMessage.EXCEPTIONS_INIT_MESSAGE);
+    await this.initExceptionFilters();
+    this.logger.info(InfoMessage.EXCEPTIONS_INIT_COMPLETED_MESSAGE);
 
     this.logger.info(InfoMessage.SERVER_INIT_MESSAGE);
     await this.initServer();
