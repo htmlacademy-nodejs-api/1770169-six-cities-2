@@ -26,24 +26,26 @@ export class DefaultCommentService implements CommentService {
 
   async find(offerId: string): Promise<DocumentType<CommentEntity>[]> {
     return await this.commentModel
-      .find({offerId})
+      .find({offer: offerId})
       .populate('user')
       .limit(MAX_COMMENT_VIEW)
       .sort({createdAt: Sort.DOWN})
       .exec();
   }
 
+  async findById(commentId: string): Promise<DocumentType<CommentEntity> | null> {
+    return await this.commentModel
+      .findById(commentId)
+      .populate('user')
+      .exec();
+  }
+
   public async deleteById(offerId: string): Promise<number> {
     const result = await this.commentModel
-      .deleteMany({offerId})
+      .deleteMany({offer: offerId})
       .exec();
     this.logger.info(createMessage(InfoMessage.DELETE_COMMENT_MESSAGE), [result.deletedCount]);
 
     return result.deletedCount;
-  }
-
-  public async exists(value: string): Promise<boolean> {
-    return (await this.commentModel
-      .exists({offer: value})) !== null;
   }
 }

@@ -18,5 +18,5 @@ export enum Rating {
 }
 
 export enum Route {
-  OfferId = '/:offerId',
+  OfferId = '/:offerId/comments',
 }

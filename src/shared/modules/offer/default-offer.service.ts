@@ -53,7 +53,7 @@ export class DefaultOfferService implements OfferService {
         ...AGGREGATION_OPERATIONS.AddFields,
         {$limit: limit},
         {$sort: {createdAt: Sort.DOWN}}
-      ]);
+      ]).exec();
   }
 
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
@@ -65,9 +65,9 @@ export class DefaultOfferService implements OfferService {
         ...AGGREGATION_OPERATIONS.User,
         ...AGGREGATION_OPERATIONS.Location,
         ...AGGREGATION_OPERATIONS.Comment,
-        ...AGGREGATION_OPERATIONS.AddFields
-      ]);
-
+        ...AGGREGATION_OPERATIONS.AddFields,
+        {$addFields: {'user.id': {$toString: '$user._id'}}}
+      ]).exec();
     return result.length ? result[0] : null;
   }
 
@@ -81,7 +81,7 @@ export class DefaultOfferService implements OfferService {
         {$match: {$and: [{isPremium: true}, {'city.name': cityName}]}},
         {$limit: MaxView.PremiumOffer},
         {$sort: {createdAt: Sort.DOWN}}
-      ]);
+      ]).exec();
   }
 
   public async findByFavorite(): Promise<DocumentType<OfferEntity>[]> {
@@ -92,7 +92,7 @@ export class DefaultOfferService implements OfferService {
         ...AGGREGATION_OPERATIONS.Comment,
         ...AGGREGATION_OPERATIONS.AddFields,
         {$match: {isFavorite: true}}
-      ]);
+      ]).exec();
   }
 
   public async addOrRemoveFavorite(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
@@ -104,5 +104,10 @@ export class DefaultOfferService implements OfferService {
   public async exists(value: string): Promise<boolean> {
     return (await this.offerModel
       .exists({_id: value})) !== null;
+  }
+
+  public async owner(offerId: string, userId: string): Promise<boolean> {
+    return (await this.offerModel
+      .findOne({_id: offerId, user: userId})) !== null;
   }
 }

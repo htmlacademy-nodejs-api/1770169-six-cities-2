@@ -3,9 +3,9 @@ import {DocumentType} from '@typegoose/typegoose';
 import {OfferEntity} from './offer.entity.js';
 import {CreateOfferDto} from './dto/create-offer.dto.js';
 import {UpdateOfferDto} from './dto/update-offer.dto.js';
-import {DocumentExists} from '../../libs/rest/index.js';
+import {DocumentExists, DocumentOwner} from '../../libs/rest/index.js';
 
-export interface OfferService extends DocumentExists {
+export interface OfferService extends DocumentExists, DocumentOwner {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
   updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
   deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
@@ -13,5 +13,5 @@ export interface OfferService extends DocumentExists {
   findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   findByPremium(city: string): Promise<DocumentType<OfferEntity>[]>;
   findByFavorite(): Promise<DocumentType<OfferEntity>[]>;
-  addOrRemoveFavorite(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>
+  addOrRemoveFavorite(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
 }

@@ -39,4 +39,9 @@ export class DefaultLocationService implements LocationService {
       .findByIdAndUpdate(cityId, dto, {new: true})
       .exec();
   }
+
+  public async exists(value: string): Promise<boolean> {
+    return (await this.locationModel
+      .exists({_id: value})) !== null;
+  }
 }

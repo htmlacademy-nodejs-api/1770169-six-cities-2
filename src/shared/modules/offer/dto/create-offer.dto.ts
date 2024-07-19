@@ -14,7 +14,7 @@ import {
   MinLength
 } from 'class-validator';
 
-import {Facilities, Housing, Location, OfferCity} from '../../../types/index.js';
+import {City, Facilities, Housing, Location} from '../../../types/index.js';
 import {OfferValidationMessage} from './offer-validation-message.js';
 import {Bedroom, Description, GOODS_MIN_SIZE, Guest, IMAGES_SIZE, Price, Title} from '../offer.constant.js';
 
@@ -32,8 +32,8 @@ export class CreateOfferDto {
   @IsDateString({}, {message: OfferValidationMessage.date.invalidFormat})
   public date: Date;
 
-  @IsEnum(OfferCity, {message: OfferValidationMessage.city.invalid})
-  public city: OfferCity;
+  @IsObject({message: OfferValidationMessage.city.invalidFormat})
+  public city: City;
 
   @IsString({message: OfferValidationMessage.previewImage.invalidFormat})
   public previewImage: string;

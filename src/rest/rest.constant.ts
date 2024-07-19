@@ -18,7 +18,6 @@ export enum Directory {
 }
 
 export enum BaseRout {
-  Comments = '/six-cities/comments',
   Offers = '/six-cities/offers',
   Favorites = '/six-cities/favorites',
   Premium = '/six-cities/premium',

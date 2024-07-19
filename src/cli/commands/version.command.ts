@@ -8,10 +8,7 @@ import {Command} from './command.interface.js';
 import {createMessage, getErrorMessage} from '../../shared/helpers/index.js';
 import {ENCODING} from '../../shared/constants/index.js';
 import {GET_VERSION_FILE_PATH} from '../cli.constant.js';
-
-type PackageJSONConfig = {
-  version: string;
-}
+import {PackageJSONConfig} from './command.type.js';
 
 function isPackageJSONConfig(value: unknown): value is PackageJSONConfig {
   return (

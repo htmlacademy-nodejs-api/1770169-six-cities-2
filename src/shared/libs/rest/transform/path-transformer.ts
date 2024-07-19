@@ -28,7 +28,7 @@ export class PathTransformer {
     return FIELDS.includes(property);
   }
 
-  execute(data: Record<string, unknown>): Record<string, unknown> {
+  public execute(data: Record<string, unknown>): Record<string, unknown> {
     const stack = [data];
 
     while(stack.length > 0) {

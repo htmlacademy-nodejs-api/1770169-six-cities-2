@@ -5,31 +5,32 @@ import {fileURLToPath} from 'node:url';
 import {Logger as LoggerType, pino, transport} from 'pino';
 
 import {Logger} from './logger.interface.js';
+import {DESTINATION_URL, Level, LOGGER_NAME, TRANSPORT_TARGET} from './logger.constant.js';
 
 @injectable()
 export class PinoLogger implements Logger {
   private readonly logger: LoggerType;
 
   constructor() {
-    const destination = fileURLToPath(new URL('../../../../logs/logger.log', import.meta.url));
+    const destination = fileURLToPath(new URL(DESTINATION_URL, import.meta.url));
     const multiTransport = transport({
       targets: [
         {
-          target: 'pino/file',
+          target: TRANSPORT_TARGET,
           options: {destination},
-          level: 'debug'
+          level: Level.Debug
         },
         {
-          target: 'pino/file',
+          target: TRANSPORT_TARGET,
           options: {},
-          level: 'info'
+          level: Level.Info
         }
       ]
     });
 
     this.logger = pino({
-      name: 'pino-express',
-      level: 'info'
+      name: LOGGER_NAME,
+      level: Level.Info
     }, multiTransport);
   }
 

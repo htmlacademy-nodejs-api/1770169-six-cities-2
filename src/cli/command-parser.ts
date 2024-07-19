@@ -1,10 +1,5 @@
 import {COMMAND_PREFIX, OPTION_PREFIX} from './cli.constant.js';
-
-type CommandValue = {
-  arguments: string[],
-  options: string[]
-}
-type ParsedCommand = Record<string, CommandValue>;
+import {ParsedCommand} from './cli.type.js';
 
 export default class CommandParser {
   static parse(cliArguments: string[]): ParsedCommand {

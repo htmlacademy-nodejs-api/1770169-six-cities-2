@@ -2,8 +2,9 @@ import EventEmitter from 'node:events';
 import {createReadStream} from 'node:fs';
 
 import {FileReader} from './file-reader.interface.js';
-import {CHUNK_SIZE} from './file-reader.constant.js';
+import {CHUNK_SIZE, DEFAULT_COUNT, LINE_POSITION} from './file-reader.constant.js';
 import {ENCODING, Separator} from '../../constants/index.js';
+
 export class TsvFileReader extends EventEmitter implements FileReader {
   constructor(
     private readonly filename: string
@@ -21,8 +22,8 @@ export class TsvFileReader extends EventEmitter implements FileReader {
     );
 
     let remainingData = '';
-    let nextLinePosition = -1;
-    let importedRowCount = 0;
+    let nextLinePosition = LINE_POSITION;
+    let importedRowCount = DEFAULT_COUNT;
 
     await readStream.forEach(async (chunk) => {
       remainingData += chunk.toString();

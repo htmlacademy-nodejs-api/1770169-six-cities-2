@@ -12,18 +12,16 @@ export class DocumentExistsMiddleware implements Middleware {
   private readonly service: DocumentExists;
   private readonly entityName: string;
   private readonly paramName: string;
-  private readonly bodyField: string;
 
   constructor(
-    {service, entityName, paramName = '', bodyField = ''}: {service: DocumentExists, entityName: string, paramName?: string, bodyField?: string}
+    {service, entityName, paramName = ''}: {service: DocumentExists, entityName: string, paramName?: string}
   ) {
     this.service = service;
     this.entityName = entityName;
     this.paramName = paramName;
-    this.bodyField = bodyField;
   }
 
-  public async execute({body, params}: Request, _res: Response, next: NextFunction): Promise<void> {
+  public async execute({params}: Request, _res: Response, next: NextFunction): Promise<void> {
     if (this.paramName) {
       const existsDocument = await this.service.exists(params[this.paramName]);
 
@@ -31,18 +29,6 @@ export class DocumentExistsMiddleware implements Middleware {
         throw new HttpError(
           StatusCodes.NOT_FOUND,
           createMessage(ErrorMessage.CITY_NOT_FOUND_MESSAGE, [this.entityName, params[this.paramName]]),
-          Detail.DocumentExistsMiddleware
-        );
-      }
-    }
-
-    if (this.bodyField) {
-      const existsDocument = await this.service.exists(body[this.bodyField]);
-
-      if (!existsDocument) {
-        throw new HttpError(
-          StatusCodes.NOT_FOUND,
-          createMessage(ErrorMessage.CITY_NOT_FOUND_MESSAGE, [this.entityName, body[this.bodyField]]),
           Detail.DocumentExistsMiddleware
         );
       }

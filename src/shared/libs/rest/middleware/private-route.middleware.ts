@@ -8,7 +8,7 @@ import {Detail, ErrorMessage} from '../rest.constant.js';
 
 
 export class PrivateRouteMiddleware implements Middleware {
-  execute({locals}: Request, _res: Response, next: NextFunction): void {
+  public execute({locals}: Request, _res: Response, next: NextFunction): void {
     if (!locals) {
       throw new HttpError(
         StatusCodes.UNAUTHORIZED,

@@ -1,4 +1,5 @@
 export * from './types/document-exists.interface.js';
+export * from './types/document-owner.interface.js';
 export * from './types/http-method.enum.js';
 export * from './types/error-type.enum.js';
 export * from './types/validation-error.type.js';
@@ -16,6 +17,7 @@ export * from './middleware/document-exists.middleware.js';
 export * from './middleware/upload-file-middleware.js';
 export * from './middleware/private-route.middleware.js';
 export * from './middleware/parse-token.middleware.js';
+export * from './middleware/document-owner.middleware.js';
 export * from './transform/path-transformer.js';
 export * from './errors/http-error.js';
 export * from './errors/validation-error.js';

@@ -8,7 +8,6 @@ import {UpdateOfferDto} from '../dto/update-offer.dto.js';
 export type RequestQuery = {
   count?: string;
   city: string;
-  status: string;
 } | Query;
 
 export type RequestParams = {
