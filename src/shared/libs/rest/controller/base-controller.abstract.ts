@@ -25,7 +25,7 @@ export abstract class BaseController implements Controller {
     this.router = Router();
   }
 
-  get() {
+  public get() {
     return this.router;
   }
 

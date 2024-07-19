@@ -6,11 +6,11 @@ import {Command} from './command.interface.js';
 export default class HelpCommand implements Command {
   readonly name: string = CommandName.Help;
 
-  get(): string {
+  public get(): string {
     return this.name;
   }
 
-  execute(_options: string[], ..._parameters: string[]): void {
+  public execute(_options: string[], ..._parameters: string[]): void {
     console.info(chalk.yellow(`
       Программа для подготовки данных для REST API сервера.
 
