@@ -1,9 +1,9 @@
 version: '3.9'
 services:
   db:
-    image: mongo:8.0
+    image: mongo:8.0-rc
     container_name: six-cities_mongodb
-    restar: always
+    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER_NAME}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_USER_PASSWORD}
