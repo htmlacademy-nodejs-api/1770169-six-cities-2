@@ -74,9 +74,9 @@ export const configRestSchema = convict<RestSchema>({
   },
   HOST: {
     doc: 'Server startup host',
-    format: String,
+    format: 'ipaddress',
     env: 'HOST',
-    default: 'localhost'
+    default: '127.0.0.1'
   },
   STATIC_DIRECTORY: {
     doc: '',
